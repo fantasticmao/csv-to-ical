@@ -1,12 +1,12 @@
 package config
 
-type Tag string
+type CalendarType string
 
 const (
-	Solar         Tag = "solar"
-	Lunar         Tag = "lunar"
-	BirthdaySolar Tag = "birthday_solar"
-	BirthdayLunar Tag = "birthday_lunar"
+	Solar         CalendarType = "solar"
+	Lunar         CalendarType = "lunar"
+	BirthdaySolar CalendarType = "birthday_solar"
+	BirthdayLunar CalendarType = "birthday_lunar"
 )
 
 type Language string
