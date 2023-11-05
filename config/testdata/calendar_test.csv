@@ -1,0 +1,5 @@
+name,month,day,year,calendar_type
+小明,5,1,2000,birthday_lunar
+小红,10,1,2002,birthday_solar
+小明和小红的结婚纪念日,10,31,2023,lunar
+小丽,12,31,,solar

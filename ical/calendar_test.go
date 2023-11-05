@@ -1,8 +1,8 @@
 package ical
 
 import (
+	"github.com/fantasticmao/csv-to-ical/config"
 	"github.com/fantasticmao/csv-to-ical/date"
-	"github.com/fantasticmao/csv-to-ical/i18n"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -21,7 +21,7 @@ func TestComponentEvent_String(t *testing.T) {
 	datetime, err := date.ParseTime("20231031")
 	assert.Nil(t, err)
 
-	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", i18n.En,
+	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", config.En,
 		"Tom’s 18th Birthday", 5, datetime, datetime)
 	str := cmpEvent.String()
 	assert.Equal(t, `BEGIN:VEVENT
@@ -34,13 +34,13 @@ TRANSP:TRANSPARENT
 RRULE:FREQ=YEARLY;COUNT=5
 END:VEVENT`, str)
 
-	cmpEvent = NewComponentEvent("小明-20231031-birthday_lunar@localhost", i18n.ZhCn,
+	cmpEvent = NewComponentEvent("小明-20231031-birthday_lunar@localhost", config.ZhCn,
 		"小明的18岁农历生日", 0, datetime, datetime)
 	str = cmpEvent.String()
 	assert.Equal(t, `BEGIN:VEVENT
 DTSTAMP;VALUE=DATE:20231031
 UID:小明-20231031-birthday_lunar@localhost
-DTSTART;VALUE=DATE:20231031
+DTSTART;VALUE=DATE:20230501
 CLASS:PUBLIC
 SUMMARY;LANGUAGE=zh_CN:小明的18岁农历生日
 TRANSP:TRANSPARENT

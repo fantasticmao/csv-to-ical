@@ -1,0 +1,9 @@
+log-level: info
+
+csv-providers:
+  user1:
+    file: "testdata/calendar_test.csv"
+    lang: "zh_CN"
+  user2:
+    url: "https://gist.githubusercontent.com/fantasticmao/events.csv"
+    lang: "en"

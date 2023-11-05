@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/fantasticmao/csv-to-ical/config"
 	"github.com/fantasticmao/csv-to-ical/date"
-	"github.com/fantasticmao/csv-to-ical/i18n"
 	"github.com/fantasticmao/csv-to-ical/ical"
 	"net/http"
 	"time"
@@ -17,9 +17,9 @@ func main() {
 		}
 
 		events := []ical.ComponentEvent{
-			ical.NewComponentEvent("Tom-20231031-birthday_solar@localhost", i18n.En,
+			ical.NewComponentEvent("Tom-20231031-birthday_solar@localhost", config.En,
 				"Tom’s 18th Birthday", 5, time.Now(), datetime),
-			ical.NewComponentEvent("小明-20231031-birthday_lunar@localhost", i18n.ZhCn,
+			ical.NewComponentEvent("小明-20230501-birthday_lunar@localhost", config.ZhCn,
 				"小明的18岁农历生日", 0, time.Now(), datetime),
 		}
 		obj := ical.NewObject("github.com/fantasticmao/csv-to-ical", events)

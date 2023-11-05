@@ -2,8 +2,8 @@ package ical
 
 import (
 	"bytes"
+	"github.com/fantasticmao/csv-to-ical/config"
 	"github.com/fantasticmao/csv-to-ical/date"
-	"github.com/fantasticmao/csv-to-ical/i18n"
 	"html/template"
 	"time"
 )
@@ -48,13 +48,13 @@ type ComponentEvent struct {
 	Uid        string
 	DtStart    string
 	Class      string
-	Language   i18n.Language
+	Language   config.Language
 	Summary    string
 	Transp     string
 	RecurCount int
 }
 
-func NewComponentEvent(uid string, language i18n.Language, summary string, recur int,
+func NewComponentEvent(uid string, language config.Language, summary string, recur int,
 	now, start time.Time) ComponentEvent {
 	return ComponentEvent{
 		DtStamp:    date.FormatTime(now),
