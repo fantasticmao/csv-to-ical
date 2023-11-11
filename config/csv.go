@@ -1,29 +1,27 @@
 package config
 
 import (
-	"bytes"
 	"encoding/csv"
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func init() {
-	http.DefaultClient.Transport = &http.Transport{
-		Proxy: func(*http.Request) (*url.URL, error) {
-			proxy, err := url.Parse("http://127.0.0.1:7890")
-			if err != nil {
-				return nil, err
-			}
-			return proxy, nil
-		},
-	}
-}
+//func init() {
+//	http.DefaultClient.Transport = &http.Transport{
+//		Proxy: func(*http.Request) (*url.URL, error) {
+//			proxy, err := url.Parse("http://127.0.0.1:7890")
+//			if err != nil {
+//				return nil, err
+//			}
+//			return proxy, nil
+//		},
+//	}
+//}
 
 type Event struct {
 	name         string
@@ -33,7 +31,7 @@ type Event struct {
 	calendarType CalendarType
 }
 
-func newEvent(name, monthStr, dayStr, yearStr, calType string) (*Event, error) {
+func newEvent(name, monthStr, dayStr, yearStr, calTypeIdx string) (*Event, error) {
 	month, err := strconv.Atoi(monthStr)
 	if err != nil {
 		return nil, err
@@ -56,23 +54,21 @@ func newEvent(name, monthStr, dayStr, yearStr, calType string) (*Event, error) {
 		}
 	}
 
-	calendarType := CalendarType(calType)
-
 	return &Event{
 		name:         name,
 		month:        time.Month(month),
 		day:          day,
 		year:         year,
-		calendarType: calendarType,
+		calendarType: CalendarType(calTypeIdx),
 	}, nil
 }
 func ParseEventFromFile(csvFile string) ([]Event, error) {
-	data, err := os.ReadFile(csvFile)
+	file, err := os.Open(csvFile)
 	if err != nil {
 		return nil, err
 	}
 
-	return parseEvent(data)
+	return parseEvent(file)
 }
 
 func ParseEventFromUrl(csvUrl string) ([]Event, error) {
@@ -82,21 +78,16 @@ func ParseEventFromUrl(csvUrl string) ([]Event, error) {
 	}
 
 	defer resp.Body.Close()
-	data, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return parseEvent(data)
+	return parseEvent(resp.Body)
 }
 
-func parseEvent(data []byte) ([]Event, error) {
-	reader := csv.NewReader(bytes.NewReader(data))
+func parseEvent(reader io.Reader) ([]Event, error) {
+	csvReader := csv.NewReader(reader)
 
 	var nameIdx, monthIdx, dayIdx, yearIdx, calTypeIdx int
 	var events []Event
 	for i := 0; ; i++ {
-		record, err := reader.Read()
+		record, err := csvReader.Read()
 		if err == io.EOF {
 			break
 		}
@@ -105,25 +96,25 @@ func parseEvent(data []byte) ([]Event, error) {
 		}
 
 		if i == 0 {
-			for j, v := range record {
+			for idx, v := range record {
 				switch v {
 				case "name":
-					nameIdx = j
+					nameIdx = idx
 				case "month":
-					monthIdx = j
+					monthIdx = idx
 				case "day":
-					dayIdx = j
+					dayIdx = idx
 				case "year":
-					yearIdx = j
+					yearIdx = idx
 				case "calendar_type":
-					calTypeIdx = j
+					calTypeIdx = idx
 				}
 			}
 		} else {
 			event, err := newEvent(record[nameIdx], record[monthIdx], record[dayIdx],
 				record[yearIdx], record[calTypeIdx])
 			if err != nil {
-				return nil, fmt.Errorf("new Event error in line: %v record: %v, cause by %v",
+				return nil, fmt.Errorf("new Event error in line: %v with record: %v, cause by %v",
 					i, record, err.Error())
 			}
 

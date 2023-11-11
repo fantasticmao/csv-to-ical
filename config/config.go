@@ -16,10 +16,10 @@ type CsvProvider struct {
 	Lang Language `yaml:"lang"`
 }
 
-func ParseConfig(path string) Config {
+func ParseConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	config := &Config{
@@ -27,8 +27,8 @@ func ParseConfig(path string) Config {
 	}
 	err = yaml.Unmarshal(data, config)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return *config
+	return config, nil
 }

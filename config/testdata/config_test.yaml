@@ -5,5 +5,5 @@ csv-providers:
     file: "testdata/calendar_test.csv"
     lang: "zh_CN"
   user2:
-    url: "https://gist.githubusercontent.com/fantasticmao/events.csv"
+    url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/config/testdata/calendar_test.csv"
     lang: "en"
