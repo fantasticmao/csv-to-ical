@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestAddLunarYears(t *testing.T) {
+func TestLunarToSolar(t *testing.T) {
 	type args struct {
 		date  time.Time
 		years int
@@ -16,16 +16,16 @@ func TestAddLunarYears(t *testing.T) {
 		args     args
 		wantDate time.Time
 	}{
-		{"2023-10-31+0", args{NewDate(2023, 10, 31), 0}, NewDate(2023, 10, 31)},
-		{"2023-10-31+1", args{NewDate(2023, 10, 31), 1}, NewDate(2024, 10, 19)},
-		{"2023-10-31+2", args{NewDate(2023, 10, 31), 2}, NewDate(2025, 11, 6)},
-		{"2023-10-31+3", args{NewDate(2023, 10, 31), 3}, NewDate(2026, 10, 26)},
-		{"2023-10-31+4", args{NewDate(2023, 10, 31), 4}, NewDate(2027, 10, 16)},
+		{"2023-8-15+0", args{NewDate(2023, 8, 15), 0}, NewDate(2023, 9, 29)},
+		{"2023-8-15+1", args{NewDate(2023, 8, 15), 1}, NewDate(2024, 9, 17)},
+		{"2023-8-15+2", args{NewDate(2023, 8, 15), 2}, NewDate(2025, 10, 6)},
+		{"2023-8-15+3", args{NewDate(2023, 8, 15), 3}, NewDate(2026, 9, 25)},
+		{"2023-8-15+4", args{NewDate(2023, 8, 15), 4}, NewDate(2027, 9, 15)},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotDate := AddLunarYears(tt.args.date, tt.args.years)
+			gotDate := LunarToSolar(tt.args.date, tt.args.years)
 			assert.Equalf(t, tt.wantDate, gotDate, "AddLunarYears(%v, %v)", tt.args.date, tt.args.years)
 		})
 	}

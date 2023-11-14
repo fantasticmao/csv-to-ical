@@ -5,17 +5,16 @@ import (
 	"time"
 )
 
-// AddLunarYears 农历新增年份
-func AddLunarYears(date time.Time, years int) time.Time {
-	solar := lunarsolar.Solar{
-		SolarYear:  date.Year(),
-		SolarMonth: int(date.Month()),
-		SolarDay:   date.Day(),
+// LunarToSolar 农历转公历，并新增年份
+func LunarToSolar(date time.Time, addYears int) time.Time {
+	lunar := lunarsolar.Lunar{
+		IsLeap:     false,
+		LunarYear:  date.Year() + addYears,
+		LunarMonth: int(date.Month()),
+		LunarDay:   date.Day(),
 	}
-	lunar := lunarsolar.SolarToLunar(solar)
-	lunar.LunarYear = lunar.LunarYear + years
-	newDate := lunarsolar.LunarToSolar(*lunar)
-	return NewDate(newDate.SolarYear, newDate.SolarMonth, newDate.SolarDay)
+	solar := lunarsolar.LunarToSolar(lunar)
+	return NewDate(solar.SolarYear, solar.SolarMonth, solar.SolarDay)
 }
 
 // CalcAge 计算周岁
