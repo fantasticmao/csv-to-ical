@@ -44,7 +44,9 @@ func main() {
 
 	for owner, provider := range appConfig.CsvProviders {
 		err = app.RegisterHandler(owner, provider)
-		fatal("register HTTP handler error: %v\n", err.Error())
+		if err != nil {
+			fatal("register HTTP handler error: %v\n", err.Error())
+		}
 	}
 
 	app.StartServer(appConfig.BindAddress)

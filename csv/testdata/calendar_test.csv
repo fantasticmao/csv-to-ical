@@ -4,6 +4,6 @@ name,month,day,year,calendar_type
 小明的结婚纪念日,8,1,2023,lunar
 中秋节,8,15,,lunar
 小明,9,1,2000,birthday_solar
-小明的朋友,10,1,,birthday_solar
-小明的爷爷,11,1,1955,birthday_lunar
-小明的奶奶,12,1,,birthday_lunar
+小明朋友,10,1,,birthday_solar
+小明爷爷,11,1,1955,birthday_lunar
+小明奶奶,12,1,,birthday_lunar

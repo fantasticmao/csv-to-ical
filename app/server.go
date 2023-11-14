@@ -18,7 +18,7 @@ func RegisterHandler(owner string, provider config.CsvProvider) error {
 		events = e
 	}
 	if provider.Url != "" {
-		e, err := csv.ParseEventFromFile(provider.File)
+		e, err := csv.ParseEventFromUrl(provider.Url)
 		if err != nil {
 			return err
 		}
@@ -26,7 +26,7 @@ func RegisterHandler(owner string, provider config.CsvProvider) error {
 	}
 
 	f := handleEvents(events, provider.Lang)
-	http.HandleFunc(owner, f)
+	http.HandleFunc("/provider/"+owner, f)
 	return nil
 }
 

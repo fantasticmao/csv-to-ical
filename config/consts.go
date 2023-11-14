@@ -43,10 +43,10 @@ func init() {
 	SummaryMap[ZhCn] = make(map[CalendarType]map[bool]string)
 
 	SummaryMap[ZhCn][BirthdaySolar] = make(map[bool]string)
-	SummaryMap[ZhCn][BirthdaySolar][true] = "%s 的 %d 岁生日"
-	SummaryMap[ZhCn][BirthdaySolar][false] = "%s 的生日"
+	SummaryMap[ZhCn][BirthdaySolar][true] = "%s的 %d 岁生日"
+	SummaryMap[ZhCn][BirthdaySolar][false] = "%s的生日"
 
 	SummaryMap[ZhCn][BirthdayLunar] = make(map[bool]string)
-	SummaryMap[ZhCn][BirthdayLunar][true] = "%s 的 %d 岁农历生日"
-	SummaryMap[ZhCn][BirthdayLunar][false] = "%s 的农历生日"
+	SummaryMap[ZhCn][BirthdayLunar][true] = "%s的 %d 岁农历生日"
+	SummaryMap[ZhCn][BirthdayLunar][false] = "%s的农历生日"
 }

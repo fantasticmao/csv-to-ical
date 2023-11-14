@@ -53,19 +53,19 @@ func validate(t *testing.T, events []Event) {
 	assert.Equal(t, 2000, events[4].Year)
 	assert.Equal(t, config.BirthdaySolar, events[4].CalendarType)
 
-	assert.Equal(t, "小明的朋友", events[5].Name)
+	assert.Equal(t, "小明朋友", events[5].Name)
 	assert.Equal(t, 10, events[5].Month)
 	assert.Equal(t, 1, events[5].Day)
 	assert.Equal(t, -1, events[5].Year)
 	assert.Equal(t, config.BirthdaySolar, events[5].CalendarType)
 
-	assert.Equal(t, "小明的爷爷", events[6].Name)
+	assert.Equal(t, "小明爷爷", events[6].Name)
 	assert.Equal(t, 11, events[6].Month)
 	assert.Equal(t, 1, events[6].Day)
 	assert.Equal(t, 1955, events[6].Year)
 	assert.Equal(t, config.BirthdayLunar, events[6].CalendarType)
 
-	assert.Equal(t, "小明的奶奶", events[7].Name)
+	assert.Equal(t, "小明奶奶", events[7].Name)
 	assert.Equal(t, 12, events[7].Month)
 	assert.Equal(t, 1, events[7].Day)
 	assert.Equal(t, -1, events[7].Year)
