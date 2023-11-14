@@ -1,9 +1,9 @@
 log-level: info
 
 csv-providers:
-  user1:
+  foo:
     file: "testdata/calendar_test.csv"
     lang: "zh_CN"
-  user2:
-    url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/config/testdata/calendar_test.csv"
+  bar:
+    url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv"
     lang: "en"

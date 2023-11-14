@@ -1,37 +1,61 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"github.com/fantasticmao/csv-to-ical/app"
 	"github.com/fantasticmao/csv-to-ical/config"
-	"github.com/fantasticmao/csv-to-ical/date"
-	"github.com/fantasticmao/csv-to-ical/ical"
-	"net/http"
-	"time"
+	"os"
+	"os/signal"
+	"path"
+	"runtime"
+	"syscall"
 )
 
+var (
+	showVersion bool
+	configDir   string
+)
+
+func init() {
+	flag.BoolVar(&showVersion, "v", false, "show current version")
+	flag.StringVar(&configDir, "d", "", "specify the configuration directory")
+	flag.Parse()
+}
+
 func main() {
-	http.HandleFunc("/fantasticmao/birthdays.ics", func(writer http.ResponseWriter, request *http.Request) {
-		datetime, err := date.ParseTime("20231031")
-		if err != nil {
-			panic(err)
-		}
-
-		events := []ical.ComponentEvent{
-			ical.NewComponentEvent("Tom-20231031-birthday_solar@localhost", config.En,
-				"Tom’s 18th Birthday", 5, time.Now(), datetime),
-			ical.NewComponentEvent("小明-20230501-birthday_lunar@localhost", config.ZhCn,
-				"小明的18岁农历生日", 0, time.Now(), datetime),
-		}
-		obj := ical.NewObject("github.com/fantasticmao/csv-to-ical", events)
-
-		_, err = fmt.Fprintln(writer, obj.String())
-		if err != nil {
-			panic(err)
-		}
-	})
-
-	err := http.ListenAndServe("localhost:8080", nil)
-	if err != nil {
-		panic(err)
+	if showVersion {
+		fmt.Printf("%v %v %v-%v with %v at commit %v build %v\n", config.Name, config.Version,
+			runtime.GOOS, runtime.GOARCH, runtime.Version(), config.CommitHash, config.BuildTime)
+		return
 	}
+
+	if configDir == "" {
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			fatal("get user home directory error: %v\n", err.Error())
+		}
+		configDir = path.Join(homeDir, ".config", config.Name)
+	}
+	appConfig, err := config.ParseConfig(path.Join(configDir, "config.yaml"))
+	if err != nil {
+		fatal("parse config file error: %v\n", err.Error())
+	}
+
+	for owner, provider := range appConfig.CsvProviders {
+		err = app.RegisterHandler(owner, provider)
+		fatal("register HTTP handler error: %v\n", err.Error())
+	}
+
+	app.StartServer(appConfig.BindAddress)
+	fmt.Printf("start HTTP server success, bind address: %v\n", appConfig.BindAddress)
+
+	sigCh := make(chan os.Signal)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+	<-sigCh
+}
+
+func fatal(format string, a ...interface{}) {
+	_, _ = fmt.Fprintf(os.Stderr, format, a...)
+	os.Exit(1)
 }

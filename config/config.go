@@ -1,12 +1,14 @@
 package config
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
 )
 
 type Config struct {
-	logLevel     string                 `yaml:"log-level"`
+	LogLevel     string                 `yaml:"log-level"`
+	BindAddress  string                 `yaml:"bind-address"`
 	CsvProviders map[string]CsvProvider `yaml:"csv-providers"`
 }
 
@@ -16,6 +18,15 @@ type CsvProvider struct {
 	Lang Language `yaml:"lang"`
 }
 
+func (cfg *Config) validate() error {
+	for k, v := range cfg.CsvProviders {
+		if v.File == "" && v.Url == "" {
+			return fmt.Errorf("file and url fields in the key: %v cannot be empty at the same time", k)
+		}
+	}
+	return nil
+}
+
 func ParseConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -23,12 +34,17 @@ func ParseConfig(path string) (*Config, error) {
 	}
 
 	config := &Config{
-		logLevel: "info",
+		LogLevel:    "info",
+		BindAddress: "127.0.0.1:7788",
 	}
 	err = yaml.Unmarshal(data, config)
 	if err != nil {
 		return nil, err
 	}
 
+	err = config.validate()
+	if err != nil {
+		return nil, err
+	}
 	return config, nil
 }

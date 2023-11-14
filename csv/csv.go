@@ -1,14 +1,14 @@
-package config
+package csv
 
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/fantasticmao/csv-to-ical/config"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
-	"time"
 )
 
 //func init() {
@@ -24,44 +24,13 @@ import (
 //}
 
 type Event struct {
-	name         string
-	month        time.Month
-	day          int
-	year         int
-	calendarType CalendarType
+	Name         string
+	Month        int
+	Day          int
+	Year         int
+	CalendarType config.CalendarType
 }
 
-func newEvent(name, monthStr, dayStr, yearStr, calTypeIdx string) (*Event, error) {
-	month, err := strconv.Atoi(monthStr)
-	if err != nil {
-		return nil, err
-	}
-
-	day, err := strconv.Atoi(dayStr)
-	if err != nil {
-		return nil, err
-	}
-
-	var year int
-	if strings.TrimSpace(yearStr) == "" {
-		year = -1
-	} else {
-		y, err := strconv.Atoi(yearStr)
-		if err != nil {
-			return nil, err
-		} else {
-			year = y
-		}
-	}
-
-	return &Event{
-		name:         name,
-		month:        time.Month(month),
-		day:          day,
-		year:         year,
-		calendarType: CalendarType(calTypeIdx),
-	}, nil
-}
 func ParseEventFromFile(csvFile string) ([]Event, error) {
 	file, err := os.Open(csvFile)
 	if err != nil {
@@ -122,4 +91,36 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 		}
 	}
 	return events, nil
+}
+
+func newEvent(name, monthStr, dayStr, yearStr, calTypeIdx string) (*Event, error) {
+	month, err := strconv.Atoi(monthStr)
+	if err != nil {
+		return nil, err
+	}
+
+	day, err := strconv.Atoi(dayStr)
+	if err != nil {
+		return nil, err
+	}
+
+	var year int
+	if strings.TrimSpace(yearStr) == "" {
+		year = -1
+	} else {
+		y, err := strconv.Atoi(yearStr)
+		if err != nil {
+			return nil, err
+		} else {
+			year = y
+		}
+	}
+
+	return &Event{
+		Name:         name,
+		Month:        month,
+		Day:          day,
+		Year:         year,
+		CalendarType: config.CalendarType(calTypeIdx),
+	}, nil
 }

@@ -8,7 +8,7 @@ import (
 )
 
 func TestObject_String(t *testing.T) {
-	obj := NewObject("github.com/fantasticmao/csv-to-ical", []ComponentEvent{})
+	obj := NewObject([]ComponentEvent{})
 	str := obj.String()
 	assert.Equal(t, `BEGIN:VCALENDAR
 PRODID:github.com/fantasticmao/csv-to-ical
@@ -18,8 +18,7 @@ END:VCALENDAR
 }
 
 func TestComponentEvent_String(t *testing.T) {
-	datetime, err := date.ParseTime("20231031")
-	assert.Nil(t, err)
+	datetime := date.NewDate(2023, 10, 31)
 
 	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", config.En,
 		"Tom’s 18th Birthday", 5, datetime, datetime)

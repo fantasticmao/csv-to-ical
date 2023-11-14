@@ -10,9 +10,10 @@ func TestParseConfig(t *testing.T) {
 	assert.NotNil(t, config)
 	assert.Nil(t, err)
 
-	assert.Equal(t, "info", config.logLevel)
-	assert.Equal(t, "testdata/calendar_test.csv", config.CsvProviders["user1"].File)
-	assert.Equal(t, ZhCn, config.CsvProviders["user1"].Lang)
-	assert.Equal(t, "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/config/testdata/calendar_test.csv", config.CsvProviders["user2"].Url)
-	assert.Equal(t, En, config.CsvProviders["user2"].Lang)
+	assert.Equal(t, "info", config.LogLevel)
+	assert.Equal(t, "127.0.0.1:7788", config.BindAddress)
+	assert.Equal(t, "testdata/calendar_test.csv", config.CsvProviders["foo"].File)
+	assert.Equal(t, ZhCn, config.CsvProviders["foo"].Lang)
+	assert.Equal(t, "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv", config.CsvProviders["bar"].Url)
+	assert.Equal(t, En, config.CsvProviders["bar"].Lang)
 }

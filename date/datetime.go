@@ -5,15 +5,17 @@ import (
 	"time"
 )
 
-// SolarToLunar 公历转农历
-func SolarToLunar(sYear, sMonth, sDay int) (lYear, lMonth, lDay int) {
+// AddLunarYears 农历新增年份
+func AddLunarYears(date time.Time, years int) time.Time {
 	solar := lunarsolar.Solar{
-		SolarYear:  sYear,
-		SolarMonth: sMonth,
-		SolarDay:   sDay,
+		SolarYear:  date.Year(),
+		SolarMonth: int(date.Month()),
+		SolarDay:   date.Day(),
 	}
 	lunar := lunarsolar.SolarToLunar(solar)
-	return lunar.LunarYear, lunar.LunarMonth, lunar.LunarDay
+	lunar.LunarYear = lunar.LunarYear + years
+	newDate := lunarsolar.LunarToSolar(*lunar)
+	return NewDate(newDate.SolarYear, newDate.SolarMonth, newDate.SolarDay)
 }
 
 // CalcAge 计算周岁
@@ -30,14 +32,14 @@ func CalcAge(year, month, day int, now time.Time) int {
 }
 
 // CalcLunarAge 计算虚岁
-func CalcLunarAge(year, month, day int, now time.Time) int {
+func CalcLunarAge(year int, now time.Time) int {
 	return now.Year() - year + 1
 }
 
-func ParseTime(value string) (time.Time, error) {
-	return time.Parse("20060102", value)
+func NewDate(year, month, day int) time.Time {
+	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
 }
 
-func FormatTime(time time.Time) string {
+func FormatDate(time time.Time) string {
 	return time.Format("20060102")
 }
