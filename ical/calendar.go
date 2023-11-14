@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/config"
 	"github.com/fantasticmao/csv-to-ical/date"
-	"html/template"
+	"text/template"
 	"time"
 )
 
