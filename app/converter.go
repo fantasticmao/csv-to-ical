@@ -25,8 +25,7 @@ func convertForLunar(event csv.Event, lang config.Language, recurCount int, host
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCount; i++ {
 		// FIXME 是否需要回溯过往年份？
-		startTime := date.NewDate(now.Year(), event.Month, event.Day)
-		startTime = date.LunarToSolar(startTime, i)
+		startTime := date.LunarToSolar(now.Year(), event.Month, event.Day, i)
 
 		summary := event.Name
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
@@ -62,8 +61,7 @@ func convertForBirthdayLunar(event csv.Event, lang config.Language, recurCount i
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCount; i++ {
 		// FIXME 是否需要回溯过往年份？
-		startTime := date.NewDate(now.Year(), event.Month, event.Day)
-		startTime = date.LunarToSolar(startTime, i)
+		startTime := date.LunarToSolar(now.Year(), event.Month, event.Day, i)
 
 		var summary string
 		if event.Year > 0 {
