@@ -1,5 +1,7 @@
 package config
 
+import "fmt"
+
 const (
 	Name     = "csv-to-ical"
 	FullName = "github.com/fantasticmao/" + Name
@@ -18,6 +20,17 @@ const (
 	ZhCn Language = "zh_CN"
 )
 
+func ParseLanguage(language string) (Language, error) {
+	switch language {
+	case string(En):
+		return En, nil
+	case string(ZhCn):
+		return ZhCn, nil
+	default:
+		return "", fmt.Errorf("unsupported language: %v", language)
+	}
+}
+
 type CalendarType string
 
 const (
@@ -26,6 +39,21 @@ const (
 	BirthdaySolar CalendarType = "birthday_solar"
 	BirthdayLunar CalendarType = "birthday_lunar"
 )
+
+func ParseCalendarType(calendarType string) (CalendarType, error) {
+	switch calendarType {
+	case string(Solar):
+		return Solar, nil
+	case string(Lunar):
+		return Lunar, nil
+	case string(BirthdaySolar):
+		return BirthdaySolar, nil
+	case string(BirthdayLunar):
+		return BirthdayLunar, nil
+	default:
+		return "", fmt.Errorf("unsupported calendar type: %v", calendarType)
+	}
+}
 
 var SummaryMap = make(map[Language]map[CalendarType]map[bool]string)
 

@@ -83,7 +83,7 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 			event, err := newEvent(record[nameIdx], record[monthIdx], record[dayIdx],
 				record[yearIdx], record[calTypeIdx])
 			if err != nil {
-				return nil, fmt.Errorf("new Event error in line: %v with record: %v, cause by %v",
+				return nil, fmt.Errorf("new csv event error at line: %v in record: %v, cause by %v",
 					i, record, err.Error())
 			}
 
@@ -93,7 +93,7 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 	return events, nil
 }
 
-func newEvent(name, monthStr, dayStr, yearStr, calTypeIdx string) (*Event, error) {
+func newEvent(name, monthStr, dayStr, yearStr, calTypeStr string) (*Event, error) {
 	month, err := strconv.Atoi(monthStr)
 	if err != nil {
 		return nil, err
@@ -116,11 +116,16 @@ func newEvent(name, monthStr, dayStr, yearStr, calTypeIdx string) (*Event, error
 		}
 	}
 
+	calType, err := config.ParseCalendarType(calTypeStr)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Event{
 		Name:         name,
 		Month:        month,
 		Day:          day,
 		Year:         year,
-		CalendarType: config.CalendarType(calTypeIdx),
+		CalendarType: calType,
 	}, nil
 }

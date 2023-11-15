@@ -25,30 +25,32 @@ func init() {
 
 func main() {
 	if showVersion {
-		fmt.Printf("%v %v %v-%v with %v at commit %v build %v\n", config.Name, config.Version,
+		fmt.Printf("%v %v %v-%v with %v built on commit %v at %v\n", config.Name, config.Version,
 			runtime.GOOS, runtime.GOARCH, runtime.Version(), config.CommitHash, config.BuildTime)
 		return
 	}
 
 	if configDir == "" {
-		homeDir, err := os.UserHomeDir()
-		if err != nil {
+		if homeDir, err := os.UserHomeDir(); err != nil {
 			fatal("get user home directory error: %v\n", err.Error())
+		} else {
+			configDir = path.Join(homeDir, ".config", config.Name)
 		}
-		configDir = path.Join(homeDir, ".config", config.Name)
 	}
+
 	appConfig, err := config.ParseConfig(path.Join(configDir, "config.yaml"))
 	if err != nil {
 		fatal("parse config file error: %v\n", err.Error())
 	}
 
 	for owner, provider := range appConfig.CsvProviders {
-		err = app.RegisterHandler(owner, provider)
+		err = app.RegisterLocalHandler(configDir, owner, provider)
 		if err != nil {
 			fatal("register HTTP handler error: %v\n", err.Error())
 		}
 	}
-
+	app.RegisterRemoteHandler()
+	app.RegisterVersionHandler()
 	app.StartServer(appConfig.BindAddress)
 	fmt.Printf("start HTTP server success, bind address: %v\n", appConfig.BindAddress)
 

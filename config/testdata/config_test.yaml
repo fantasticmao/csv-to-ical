@@ -3,7 +3,7 @@ log-level: info
 csv-providers:
   foo:
     file: "testdata/calendar_test.csv"
-    lang: "zh_CN"
+    language: "zh_CN"
   bar:
     url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv"
-    lang: "en"
+    language: "en"

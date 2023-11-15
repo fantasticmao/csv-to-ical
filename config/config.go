@@ -13,15 +13,21 @@ type Config struct {
 }
 
 type CsvProvider struct {
-	File string   `yaml:"file"`
-	Url  string   `yaml:"url"`
-	Lang Language `yaml:"lang"`
+	File     string   `yaml:"file"`
+	Url      string   `yaml:"url"`
+	Language Language `yaml:"language"`
+	RecurCnt int      `yaml:"recurCnt"`
 }
 
 func (cfg *Config) validate() error {
-	for k, v := range cfg.CsvProviders {
-		if v.File == "" && v.Url == "" {
-			return fmt.Errorf("file and url fields in the key: %v cannot be empty at the same time", k)
+	for key, val := range cfg.CsvProviders {
+		if val.File == "" && val.Url == "" {
+			return fmt.Errorf("file and url fields in key: %v cannot both be empty", key)
+		}
+		if val.RecurCnt < 0 {
+			return fmt.Errorf("recurCnt in key: %v cannot be negative", key)
+		} else if val.RecurCnt > 10 {
+			return fmt.Errorf("recurCnt in key: %v cannot be grater than 10", key)
 		}
 	}
 	return nil
@@ -35,7 +41,7 @@ func ParseConfig(path string) (*Config, error) {
 
 	config := &Config{
 		LogLevel:    "info",
-		BindAddress: "127.0.0.1:7788",
+		BindAddress: "0.0.0.0:7788",
 	}
 	err = yaml.Unmarshal(data, config)
 	if err != nil {

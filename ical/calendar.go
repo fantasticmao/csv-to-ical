@@ -79,7 +79,7 @@ END:VEVENT`)
 	return output.String()
 }
 
-func NewComponentEvent(uid string, language config.Language, summary string, recur int,
+func NewComponentEvent(uid string, language config.Language, summary string, recurCnt int,
 	now, start time.Time) ComponentEvent {
 	return ComponentEvent{
 		DtStamp:    date.FormatDate(now),
@@ -89,7 +89,7 @@ func NewComponentEvent(uid string, language config.Language, summary string, rec
 		Language:   language,
 		Summary:    summary,
 		Transp:     "TRANSPARENT",
-		RecurCount: recur,
+		RecurCount: recurCnt,
 	}
 }
 
