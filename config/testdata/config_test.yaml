@@ -1,9 +1,9 @@
-log-level: info
+bind-address: "127.0.0.1:7788"
 
 csv-providers:
   foo:
     file: "testdata/calendar_test.csv"
-    language: "zh_CN"
+    language: "zh_cn"
+    recurCnt: 5
   bar:
     url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv"
-    language: "en"

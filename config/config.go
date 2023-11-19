@@ -7,22 +7,24 @@ import (
 )
 
 type Config struct {
-	LogLevel     string                 `yaml:"log-level"`
 	BindAddress  string                 `yaml:"bind-address"`
 	CsvProviders map[string]CsvProvider `yaml:"csv-providers"`
 }
 
 type CsvProvider struct {
-	File     string   `yaml:"file"`
-	Url      string   `yaml:"url"`
-	Language Language `yaml:"language"`
-	RecurCnt int      `yaml:"recurCnt"`
+	File     string `yaml:"file"`
+	Url      string `yaml:"url"`
+	Language string `yaml:"language"`
+	RecurCnt int    `yaml:"recurCnt"`
 }
 
 func (cfg *Config) validate() error {
 	for key, val := range cfg.CsvProviders {
 		if val.File == "" && val.Url == "" {
 			return fmt.Errorf("file and url fields in key: %v cannot both be empty", key)
+		}
+		if _, err := ParseLanguage(val.Language); err != nil {
+			return err
 		}
 		if val.RecurCnt < 0 {
 			return fmt.Errorf("recurCnt in key: %v cannot be negative", key)
@@ -40,7 +42,6 @@ func ParseConfig(path string) (*Config, error) {
 	}
 
 	config := &Config{
-		LogLevel:    "info",
 		BindAddress: "0.0.0.0:7788",
 	}
 	err = yaml.Unmarshal(data, config)

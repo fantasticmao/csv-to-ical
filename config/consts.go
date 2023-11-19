@@ -1,6 +1,9 @@
 package config
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 const (
 	Name     = "csv-to-ical"
@@ -21,10 +24,10 @@ const (
 )
 
 func ParseLanguage(language string) (Language, error) {
-	switch language {
-	case string(En):
+	switch strings.ToLower(language) {
+	case "", "en":
 		return En, nil
-	case string(ZhCn):
+	case "zh_cn":
 		return ZhCn, nil
 	default:
 		return "", fmt.Errorf("unsupported language: %v", language)
@@ -41,14 +44,14 @@ const (
 )
 
 func ParseCalendarType(calendarType string) (CalendarType, error) {
-	switch calendarType {
-	case string(Solar):
+	switch strings.ToLower(calendarType) {
+	case "solar":
 		return Solar, nil
-	case string(Lunar):
+	case "lunar":
 		return Lunar, nil
-	case string(BirthdaySolar):
+	case "birthday_solar":
 		return BirthdaySolar, nil
-	case string(BirthdayLunar):
+	case "birthday_lunar":
 		return BirthdayLunar, nil
 	default:
 		return "", fmt.Errorf("unsupported calendar type: %v", calendarType)

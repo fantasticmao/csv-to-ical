@@ -32,7 +32,7 @@ func RegisterRemoteHandler() {
 	http.HandleFunc("/remote", func(writer http.ResponseWriter, request *http.Request) {
 		url := request.URL.Query().Get("url")
 		if url == "" {
-			writeResponse(writer, "query param: url is required")
+			writeResponse400(writer, "query param: url is required")
 			return
 		}
 
@@ -42,7 +42,7 @@ func RegisterRemoteHandler() {
 		} else {
 			lang, err := config.ParseLanguage(param)
 			if err != nil {
-				writeResponse(writer, fmt.Sprintf("query param: lang error: %v", err.Error()))
+				writeResponse400(writer, fmt.Sprintf("query param: lang error: %v", err.Error()))
 				return
 			} else {
 				language = lang
@@ -55,14 +55,14 @@ func RegisterRemoteHandler() {
 		} else {
 			cnt, err := strconv.Atoi(param)
 			if err != nil {
-				writeResponse(writer, fmt.Sprintf("query param: recurCnt error: %v", err.Error()))
+				writeResponse400(writer, fmt.Sprintf("query param: recurCnt error: %v", err.Error()))
 				return
 			} else {
 				if cnt < 0 {
-					writeResponse(writer, "query param: recurCnt cannot be negative")
+					writeResponse400(writer, "query param: recurCnt cannot be negative")
 					return
 				} else if cnt > 10 {
-					writeResponse(writer, "query param: recurCnt cannot be grater than 10")
+					writeResponse400(writer, "query param: recurCnt cannot be grater than 10")
 					return
 				} else {
 					recurCnt = cnt
@@ -72,7 +72,7 @@ func RegisterRemoteHandler() {
 
 		events, err := csv.ParseEventFromUrl(url)
 		if err != nil {
-			writeResponse(writer, fmt.Sprintf("fetch csv events from url: %v error: %v", url, err.Error()))
+			writeResponse400(writer, fmt.Sprintf("fetch csv events from url: %v error: %v", url, err.Error()))
 			return
 		}
 
@@ -107,7 +107,8 @@ func RegisterLocalHandler(configDir, owner string, provider config.CsvProvider) 
 	http.HandleFunc("/local/"+owner, func(writer http.ResponseWriter, request *http.Request) {
 		var components []ical.ComponentEvent
 		for _, event := range events {
-			cmpEvents := csvToIcal(event, provider.Language, provider.RecurCnt, request.Host)
+			language, _ := config.ParseLanguage(provider.Language)
+			cmpEvents := csvToIcal(event, language, provider.RecurCnt, request.Host)
 			components = append(components, cmpEvents...)
 		}
 
@@ -131,6 +132,15 @@ func csvToIcal(event csv.Event, language config.Language, recurCnt int, host str
 }
 
 func writeResponse(writer http.ResponseWriter, response string) {
+	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
+	_, err := fmt.Fprintln(writer, response)
+	if err != nil {
+		fmt.Printf("write HTTP response error: %v\n", err.Error())
+	}
+}
+
+func writeResponse400(writer http.ResponseWriter, response string) {
+	writer.WriteHeader(400)
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
 	_, err := fmt.Fprintln(writer, response)
 	if err != nil {
