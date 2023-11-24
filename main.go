@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/app"
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"os"
 	"os/signal"
 	"path"
@@ -25,8 +25,8 @@ func init() {
 
 func main() {
 	if showVersion {
-		fmt.Printf("%v %v %v-%v with %v built on commit %v at %v\n", config.Name, config.Version,
-			runtime.GOOS, runtime.GOARCH, runtime.Version(), config.CommitHash, config.BuildTime)
+		fmt.Printf("%v %v %v-%v with %v built on commit %v at %v\n", common.Name, common.Version,
+			runtime.GOOS, runtime.GOARCH, runtime.Version(), common.CommitHash, common.BuildTime)
 		return
 	}
 
@@ -34,11 +34,11 @@ func main() {
 		if homeDir, err := os.UserHomeDir(); err != nil {
 			fatal("get user home directory error: %v\n", err.Error())
 		} else {
-			configDir = path.Join(homeDir, ".config", config.Name)
+			configDir = path.Join(homeDir, ".config", common.Name)
 		}
 	}
 
-	appConfig, err := config.ParseConfig(path.Join(configDir, "config.yaml"))
+	appConfig, err := common.ParseConfig(path.Join(configDir, "config.yaml"))
 	if err != nil {
 		fatal("parse config file error: %v\n", err.Error())
 	}

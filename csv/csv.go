@@ -3,7 +3,7 @@ package csv
 import (
 	"encoding/csv"
 	"fmt"
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"io"
 	"net/http"
 	"os"
@@ -28,7 +28,7 @@ type Event struct {
 	Month        int
 	Day          int
 	Year         int
-	CalendarType config.CalendarType
+	CalendarType common.CalendarType
 }
 
 func ParseEventFromFile(csvFile string) ([]Event, error) {
@@ -116,7 +116,7 @@ func newEvent(name, monthStr, dayStr, yearStr, calTypeStr string) (*Event, error
 		}
 	}
 
-	calType, err := config.ParseCalendarType(calTypeStr)
+	calType, err := common.ParseCalendarType(calTypeStr)
 	if err != nil {
 		return nil, err
 	}

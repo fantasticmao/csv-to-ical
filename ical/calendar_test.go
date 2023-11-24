@@ -1,7 +1,7 @@
 package ical
 
 import (
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/date"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -20,7 +20,7 @@ END:VCALENDAR
 func TestComponentEvent_String(t *testing.T) {
 	datetime := date.NewDate(2023, 10, 31)
 
-	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", config.En,
+	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", common.En,
 		"Tom’s 18th Birthday", 5, datetime, datetime)
 	str := cmpEvent.String()
 	assert.Equal(t, `BEGIN:VEVENT
@@ -33,7 +33,7 @@ TRANSP:TRANSPARENT
 RRULE:FREQ=YEARLY;COUNT=5
 END:VEVENT`, str)
 
-	cmpEvent = NewComponentEvent("小明-20231031-birthday_lunar@localhost", config.ZhCn,
+	cmpEvent = NewComponentEvent("小明-20231031-birthday_lunar@localhost", common.ZhCn,
 		"小明的18岁农历生日", 0, datetime, datetime)
 	str = cmpEvent.String()
 	assert.Equal(t, `BEGIN:VEVENT

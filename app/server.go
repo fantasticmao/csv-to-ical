@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/csv"
 	"github.com/fantasticmao/csv-to-ical/ical"
 	"net/http"
@@ -23,8 +23,8 @@ func StartServer(addr string) {
 func RegisterVersionHandler() {
 	http.HandleFunc("/version", func(writer http.ResponseWriter, request *http.Request) {
 		writeResponse(writer, fmt.Sprintf("%v %v %v-%v with %v built on commit %v at %v\n",
-			config.Name, config.Version, runtime.GOOS, runtime.GOARCH, runtime.Version(),
-			config.CommitHash, config.BuildTime))
+			common.Name, common.Version, runtime.GOOS, runtime.GOARCH, runtime.Version(),
+			common.CommitHash, common.BuildTime))
 	})
 }
 
@@ -36,11 +36,11 @@ func RegisterRemoteHandler() {
 			return
 		}
 
-		var language config.Language
+		var language common.Language
 		if param := request.URL.Query().Get("lang"); param == "" {
-			language = config.En
+			language = common.En
 		} else {
-			lang, err := config.ParseLanguage(param)
+			lang, err := common.ParseLanguage(param)
 			if err != nil {
 				writeResponse400(writer, fmt.Sprintf("query param: lang error: %v", err.Error()))
 				return
@@ -87,7 +87,7 @@ func RegisterRemoteHandler() {
 	})
 }
 
-func RegisterLocalHandler(configDir, owner string, provider config.CsvProvider) error {
+func RegisterLocalHandler(configDir, owner string, provider common.CsvProvider) error {
 	var events []csv.Event
 	if provider.File != "" {
 		e, err := csv.ParseEventFromFile(path.Join(configDir, provider.File))
@@ -107,7 +107,7 @@ func RegisterLocalHandler(configDir, owner string, provider config.CsvProvider) 
 	http.HandleFunc("/local/"+owner, func(writer http.ResponseWriter, request *http.Request) {
 		var components []ical.ComponentEvent
 		for _, event := range events {
-			language, _ := config.ParseLanguage(provider.Language)
+			language, _ := common.ParseLanguage(provider.Language)
 			cmpEvents := csvToIcal(event, language, provider.RecurCnt, request.Host)
 			components = append(components, cmpEvents...)
 		}
@@ -118,14 +118,14 @@ func RegisterLocalHandler(configDir, owner string, provider config.CsvProvider) 
 	return nil
 }
 
-func csvToIcal(event csv.Event, language config.Language, recurCnt int, host string) []ical.ComponentEvent {
-	if event.CalendarType == config.Solar {
+func csvToIcal(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
+	if event.CalendarType == common.Solar {
 		return convertForSolar(event, language, recurCnt, host)
-	} else if event.CalendarType == config.Lunar {
+	} else if event.CalendarType == common.Lunar {
 		return convertForLunar(event, language, recurCnt, host)
-	} else if event.CalendarType == config.BirthdaySolar {
+	} else if event.CalendarType == common.BirthdaySolar {
 		return convertForBirthdaySolar(event, language, recurCnt, host)
-	} else if event.CalendarType == config.BirthdayLunar {
+	} else if event.CalendarType == common.BirthdayLunar {
 		return convertForBirthdayLunar(event, language, recurCnt, host)
 	}
 	return nil

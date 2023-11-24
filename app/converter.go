@@ -2,14 +2,14 @@ package app
 
 import (
 	"fmt"
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/csv"
 	"github.com/fantasticmao/csv-to-ical/date"
 	"github.com/fantasticmao/csv-to-ical/ical"
 	"time"
 )
 
-func convertForSolar(event csv.Event, language config.Language, recurCnt int, host string) []ical.ComponentEvent {
+func convertForSolar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
 	// FIXME 是否需要回溯过往年份？
 	startTime := date.NewDate(now.Year(), event.Month, event.Day)
@@ -20,7 +20,7 @@ func convertForSolar(event csv.Event, language config.Language, recurCnt int, ho
 	return []ical.ComponentEvent{cmpEvent}
 }
 
-func convertForLunar(event csv.Event, language config.Language, recurCnt int, host string) []ical.ComponentEvent {
+func convertForLunar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCnt; i++ {
@@ -35,7 +35,7 @@ func convertForLunar(event csv.Event, language config.Language, recurCnt int, ho
 	return cmpEvents
 }
 
-func convertForBirthdaySolar(event csv.Event, language config.Language, recurCnt int, host string) []ical.ComponentEvent {
+func convertForBirthdaySolar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCnt; i++ {
@@ -45,9 +45,9 @@ func convertForBirthdaySolar(event csv.Event, language config.Language, recurCnt
 		var summary string
 		if event.Year > 0 {
 			age := date.CalcAge(event.Year, event.Month, event.Day, startTime)
-			summary = fmt.Sprintf(config.SummaryMap[language][event.CalendarType][true], event.Name, age)
+			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][true], event.Name, age)
 		} else {
-			summary = fmt.Sprintf(config.SummaryMap[language][event.CalendarType][false], event.Name)
+			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][false], event.Name)
 		}
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
 		cmpEvent := ical.NewComponentEvent(uid, language, summary, 0, now, startTime)
@@ -56,7 +56,7 @@ func convertForBirthdaySolar(event csv.Event, language config.Language, recurCnt
 	return cmpEvents
 }
 
-func convertForBirthdayLunar(event csv.Event, language config.Language, recurCnt int, host string) []ical.ComponentEvent {
+func convertForBirthdayLunar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCnt; i++ {
@@ -66,9 +66,9 @@ func convertForBirthdayLunar(event csv.Event, language config.Language, recurCnt
 		var summary string
 		if event.Year > 0 {
 			age := date.CalcLunarAge(event.Year, startTime)
-			summary = fmt.Sprintf(config.SummaryMap[language][event.CalendarType][true], event.Name, age)
+			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][true], event.Name, age)
 		} else {
-			summary = fmt.Sprintf(config.SummaryMap[language][event.CalendarType][false], event.Name)
+			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][false], event.Name)
 		}
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
 		cmpEvent := ical.NewComponentEvent(uid, language, summary, 0, now, startTime)

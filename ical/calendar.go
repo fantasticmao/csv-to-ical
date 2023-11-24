@@ -3,7 +3,7 @@ package ical
 import (
 	"bytes"
 	"fmt"
-	"github.com/fantasticmao/csv-to-ical/config"
+	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/date"
 	"text/template"
 	"time"
@@ -37,7 +37,7 @@ END:VCALENDAR
 
 func NewObject(components []ComponentEvent) Object {
 	return Object{
-		ProdId:     config.FullName,
+		ProdId:     common.FullName,
 		Version:    "2.0",
 		Components: components,
 	}
@@ -48,7 +48,7 @@ type ComponentEvent struct {
 	Uid        string
 	DtStart    string
 	Class      string
-	Language   config.Language
+	Language   common.Language
 	Summary    string
 	Transp     string
 	RecurCount int
@@ -77,7 +77,7 @@ END:VEVENT`)
 	return output.String()
 }
 
-func NewComponentEvent(uid string, language config.Language, summary string, recurCnt int,
+func NewComponentEvent(uid string, language common.Language, summary string, recurCnt int,
 	now, start time.Time) ComponentEvent {
 	return ComponentEvent{
 		DtStamp:    date.FormatDate(now),
@@ -91,6 +91,6 @@ func NewComponentEvent(uid string, language config.Language, summary string, rec
 	}
 }
 
-func FormatUid(name string, datetime time.Time, calendarType config.CalendarType, host string) string {
+func FormatUid(name string, datetime time.Time, calendarType common.CalendarType, host string) string {
 	return fmt.Sprintf("%s-%s-%s@%s", name, date.FormatDate(datetime), calendarType, host)
 }
