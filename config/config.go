@@ -18,6 +18,19 @@ type CsvProvider struct {
 	RecurCnt int    `yaml:"recurCnt"`
 }
 
+func (provider *CsvProvider) UnmarshalYAML(value *yaml.Node) error {
+	type rawCsvProvider CsvProvider
+	raw := rawCsvProvider{
+		Language: string(En),
+		RecurCnt: 5,
+	}
+	if err := value.Decode(&raw); err != nil {
+		return err
+	}
+	*provider = CsvProvider(raw)
+	return nil
+}
+
 func (cfg *Config) validate() error {
 	for key, val := range cfg.CsvProviders {
 		if val.File == "" && val.Url == "" {
@@ -44,13 +57,11 @@ func ParseConfig(path string) (*Config, error) {
 	config := &Config{
 		BindAddress: "0.0.0.0:7788",
 	}
-	err = yaml.Unmarshal(data, config)
-	if err != nil {
+
+	if err = yaml.Unmarshal(data, config); err != nil {
 		return nil, err
 	}
-
-	err = config.validate()
-	if err != nil {
+	if err = config.validate(); err != nil {
 		return nil, err
 	}
 	return config, nil

@@ -133,8 +133,7 @@ func csvToIcal(event csv.Event, language config.Language, recurCnt int, host str
 
 func writeResponse(writer http.ResponseWriter, response string) {
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
-	_, err := fmt.Fprintln(writer, response)
-	if err != nil {
+	if _, err := fmt.Fprintln(writer, response); err != nil {
 		fmt.Printf("write HTTP response error: %v\n", err.Error())
 	}
 }
@@ -142,8 +141,7 @@ func writeResponse(writer http.ResponseWriter, response string) {
 func writeResponse400(writer http.ResponseWriter, response string) {
 	writer.WriteHeader(400)
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
-	_, err := fmt.Fprintln(writer, response)
-	if err != nil {
+	if _, err := fmt.Fprintln(writer, response); err != nil {
 		fmt.Printf("write HTTP response error: %v\n", err.Error())
 	}
 }

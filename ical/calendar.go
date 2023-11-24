@@ -29,8 +29,7 @@ END:VCALENDAR
 	}
 
 	output := &bytes.Buffer{}
-	err = temp.Execute(output, obj)
-	if err != nil {
+	if err = temp.Execute(output, obj); err != nil {
 		panic(err)
 	}
 	return output.String()
@@ -72,8 +71,7 @@ END:VEVENT`)
 	}
 
 	output := &bytes.Buffer{}
-	err = temp.Execute(output, cmpEvent)
-	if err != nil {
+	if err = temp.Execute(output, cmpEvent); err != nil {
 		panic(err)
 	}
 	return output.String()

@@ -4,6 +4,6 @@ csv-providers:
   foo:
     file: "testdata/calendar_test.csv"
     language: "zh_cn"
-    recurCnt: 5
+    recurCnt: 3
   bar:
     url: "https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv"

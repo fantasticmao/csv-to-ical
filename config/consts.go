@@ -25,7 +25,7 @@ const (
 
 func ParseLanguage(language string) (Language, error) {
 	switch strings.ToLower(language) {
-	case "", "en":
+	case "en":
 		return En, nil
 	case "zh_cn":
 		return ZhCn, nil
