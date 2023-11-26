@@ -2,7 +2,6 @@ package ical
 
 import (
 	"github.com/fantasticmao/csv-to-ical/common"
-	"github.com/fantasticmao/csv-to-ical/date"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -18,7 +17,7 @@ END:VCALENDAR
 }
 
 func TestComponentEvent_String(t *testing.T) {
-	datetime := date.NewDate(2023, 10, 31)
+	datetime := common.NewDate(2023, 10, 31)
 
 	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", common.En,
 		"Tom’s 18th Birthday", 5, datetime, datetime)

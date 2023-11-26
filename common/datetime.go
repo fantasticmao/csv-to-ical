@@ -1,4 +1,4 @@
-package date
+package common
 
 import (
 	"github.com/isee15/Lunar-Solar-Calendar-Converter/Go/lunarsolar"

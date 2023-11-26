@@ -4,9 +4,9 @@ VERSION=$(shell cat VERSION)
 BUILD_TIME=$(shell date -u)
 COMMIT_HASH=$(shell git rev-parse --short HEAD)
 GO_BUILD=CGO_ENABLED=0 go build -trimpath -ldflags \
-	'-X "github.com/fantasticmao/csv-to-ical/config.Version=$(VERSION)" \
-	-X "github.com/fantasticmao/csv-to-ical/config.BuildTime=$(BUILD_TIME)" \
-	-X "github.com/fantasticmao/csv-to-ical/config.CommitHash=$(COMMIT_HASH)" \
+	'-X "github.com/fantasticmao/csv-to-ical/common.Version=$(VERSION)" \
+	-X "github.com/fantasticmao/csv-to-ical/common.BuildTime=$(BUILD_TIME)" \
+	-X "github.com/fantasticmao/csv-to-ical/common.CommitHash=$(COMMIT_HASH)" \
 	-w -s'
 
 PLATFORM_LIST=darwin-amd64 darwin-arm64 linux-amd64 linux-armv5 linux-armv6 linux-armv7 linux-armv8 \

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/common"
-	"github.com/fantasticmao/csv-to-ical/date"
 	"text/template"
 	"time"
 )
@@ -80,9 +79,9 @@ END:VEVENT`)
 func NewComponentEvent(uid string, language common.Language, summary string, recurCnt int,
 	now, start time.Time) ComponentEvent {
 	return ComponentEvent{
-		DtStamp:    date.FormatDate(now),
+		DtStamp:    common.FormatDate(now),
 		Uid:        uid,
-		DtStart:    date.FormatDate(start),
+		DtStart:    common.FormatDate(start),
 		Class:      "PUBLIC",
 		Language:   language,
 		Summary:    summary,
@@ -92,5 +91,5 @@ func NewComponentEvent(uid string, language common.Language, summary string, rec
 }
 
 func FormatUid(name string, datetime time.Time, calendarType common.CalendarType, host string) string {
-	return fmt.Sprintf("%s-%s-%s@%s", name, date.FormatDate(datetime), calendarType, host)
+	return fmt.Sprintf("%s-%s-%s@%s", name, common.FormatDate(datetime), calendarType, host)
 }
