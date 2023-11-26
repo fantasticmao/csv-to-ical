@@ -17,19 +17,19 @@ indent_style = tab
 indent_size = 1
 tab_width = 4
 
-[{*.js, *.json, *.css}]
+[{*.js,*.json,*.css}]
 indent_size = 2
 
 [*.sh]
 indent_size = 2
 
-[{*.cql, *.ddl, *.sql}]
+[{*.cql,*.ddl,*.sql}]
 indent_size = 2
 
 [*.xml]
 indent_size = 4
 
-[{*.yaml, *.yml}]
+[{*.yaml,*.yml}]
 indent_size = 2
 
 [*.init]
