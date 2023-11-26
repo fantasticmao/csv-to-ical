@@ -41,15 +41,15 @@ func (provider *CsvProvider) UnmarshalYAML(value *yaml.Node) error {
 func (cfg *Config) validate() error {
 	for key, val := range cfg.CsvProviders {
 		if val.File == "" && val.Url == "" {
-			return fmt.Errorf("file and url fields in key: %v cannot both be empty", key)
+			return fmt.Errorf("file and url fields in key: '%v' cannot both be empty", key)
 		}
 		if _, err := ParseLanguage(val.Language); err != nil {
 			return err
 		}
 		if val.RecurCnt < 0 {
-			return fmt.Errorf("recurCnt in key: %v cannot be negative", key)
+			return fmt.Errorf("recurCnt in key: '%v' cannot be negative", key)
 		} else if val.RecurCnt > 10 {
-			return fmt.Errorf("recurCnt in key: %v cannot be grater than 10", key)
+			return fmt.Errorf("recurCnt in key: '%v' cannot be grater than 10", key)
 		}
 	}
 	return nil
@@ -59,7 +59,7 @@ func ParseConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			fmt.Printf("config file: %v does not exist, falling back to default settings\n", path)
+			fmt.Printf("config file: '%v' does not exist, falling back to default settings\n", path)
 			data = []byte("")
 		} else {
 			return nil, err

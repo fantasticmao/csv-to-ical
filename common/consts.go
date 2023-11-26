@@ -30,7 +30,7 @@ func ParseLanguage(language string) (Language, error) {
 	case "zh_cn":
 		return ZhCn, nil
 	default:
-		return "", fmt.Errorf("unsupported language: %v", language)
+		return "", fmt.Errorf("unsupported language: '%v'", language)
 	}
 }
 
@@ -54,7 +54,7 @@ func ParseCalendarType(calendarType string) (CalendarType, error) {
 	case "birthday_lunar":
 		return BirthdayLunar, nil
 	default:
-		return "", fmt.Errorf("unsupported calendar type: %v", calendarType)
+		return "", fmt.Errorf("unsupported calendar type: '%v'", calendarType)
 	}
 }
 

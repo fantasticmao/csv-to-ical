@@ -70,7 +70,7 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 			event, err := newEvent(record[nameIdx], record[monthIdx], record[dayIdx],
 				record[yearIdx], record[calTypeIdx])
 			if err != nil {
-				return nil, fmt.Errorf("new csv event error at line: %v in record: %v, cause by %v",
+				return nil, fmt.Errorf("new csv event error at line: '%v' in record: '%v', cause by %v",
 					i, record, err.Error())
 			}
 

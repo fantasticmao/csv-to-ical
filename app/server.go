@@ -72,7 +72,7 @@ func RegisterRemoteHandler() {
 
 		events, err := csv.ParseEventFromUrl(url)
 		if err != nil {
-			writeResponse400(writer, fmt.Sprintf("fetch csv events from url: %v error: %v", url, err.Error()))
+			writeResponse400(writer, fmt.Sprintf("fetch csv events from url: '%v' error: %v", url, err.Error()))
 			return
 		}
 
