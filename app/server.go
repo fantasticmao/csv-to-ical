@@ -119,16 +119,18 @@ func RegisterLocalHandler(configDir, owner string, provider common.CsvProvider) 
 }
 
 func csvToIcal(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
-	if event.CalendarType == common.Solar {
+	switch event.CalendarType {
+	case common.Solar:
 		return convertForSolar(event, language, recurCnt, host)
-	} else if event.CalendarType == common.Lunar {
+	case common.Lunar:
 		return convertForLunar(event, language, recurCnt, host)
-	} else if event.CalendarType == common.BirthdaySolar {
+	case common.BirthdaySolar:
 		return convertForBirthdaySolar(event, language, recurCnt, host)
-	} else if event.CalendarType == common.BirthdayLunar {
+	case common.BirthdayLunar:
 		return convertForBirthdayLunar(event, language, recurCnt, host)
+	default:
+		return nil
 	}
-	return nil
 }
 
 func writeResponse(writer http.ResponseWriter, response string) {
@@ -139,7 +141,7 @@ func writeResponse(writer http.ResponseWriter, response string) {
 }
 
 func writeResponse400(writer http.ResponseWriter, response string) {
-	writer.WriteHeader(400)
+	writer.WriteHeader(http.StatusBadRequest)
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
 	if _, err := fmt.Fprintln(writer, response); err != nil {
 		fmt.Printf("write HTTP response error: %v\n", err.Error())

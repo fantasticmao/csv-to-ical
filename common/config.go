@@ -8,7 +8,13 @@ import (
 
 type Config struct {
 	BindAddress  string                 `yaml:"bind-address"`
+	HttpClient   HttpClient             `yaml:"http-client"`
 	CsvProviders map[string]CsvProvider `yaml:"csv-providers"`
+}
+
+type HttpClient struct {
+	Timeout int    `yaml:"timeout"`
+	Proxy   string `yaml:"proxy"`
 }
 
 type CsvProvider struct {
@@ -56,6 +62,9 @@ func ParseConfig(path string) (*Config, error) {
 
 	config := &Config{
 		BindAddress: "0.0.0.0:7788",
+		HttpClient: HttpClient{
+			Timeout: 3_000,
+		},
 	}
 
 	if err = yaml.Unmarshal(data, config); err != nil {
@@ -64,5 +73,7 @@ func ParseConfig(path string) (*Config, error) {
 	if err = config.validate(); err != nil {
 		return nil, err
 	}
+
+	InitHttpClient(config.HttpClient)
 	return config, nil
 }

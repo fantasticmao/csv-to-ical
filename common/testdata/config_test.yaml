@@ -1,5 +1,9 @@
 bind-address: "127.0.0.1:7788"
 
+http-client:
+  timeout: 5000
+  proxy: "http://127.0.0.1:7890"
+
 csv-providers:
   foo:
     file: "testdata/calendar_test.csv"

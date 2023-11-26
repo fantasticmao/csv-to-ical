@@ -5,23 +5,10 @@ import (
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/common"
 	"io"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
 )
-
-//func init() {
-//	http.DefaultClient.Transport = &http.Transport{
-//		Proxy: func(*http.Request) (*url.URL, error) {
-//			proxy, err := url.Parse("http://127.0.0.1:7890")
-//			if err != nil {
-//				return nil, err
-//			}
-//			return proxy, nil
-//		},
-//	}
-//}
 
 type Event struct {
 	Name         string
@@ -41,7 +28,7 @@ func ParseEventFromFile(csvFile string) ([]Event, error) {
 }
 
 func ParseEventFromUrl(csvUrl string) ([]Event, error) {
-	resp, err := http.Get(csvUrl)
+	resp, err := common.HttpGet(csvUrl)
 	if err != nil {
 		return nil, err
 	}
