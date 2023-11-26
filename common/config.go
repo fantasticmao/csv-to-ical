@@ -1,6 +1,7 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"os"
@@ -57,7 +58,12 @@ func (cfg *Config) validate() error {
 func ParseConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, os.ErrNotExist) {
+			fmt.Printf("config file: %v does not exist, falling back to default settings\n", path)
+			data = []byte("")
+		} else {
+			return nil, err
+		}
 	}
 
 	config := &Config{
