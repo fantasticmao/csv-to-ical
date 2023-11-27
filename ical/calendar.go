@@ -90,6 +90,8 @@ func NewComponentEvent(uid string, language common.Language, summary string, rec
 	}
 }
 
+// FormatUid generate globally unique identifier for the calendar component,
+// for more details see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.7
 func FormatUid(name string, datetime time.Time, calendarType common.CalendarType, host string) string {
 	return fmt.Sprintf("%s-%s-%s@%s", name, common.FormatDate(datetime), calendarType, host)
 }
