@@ -24,8 +24,6 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## License
 
-[RFC 5545](https://datatracker.ietf.org/doc/html/rfc5545)
-
 CSV-to-iCal [License](https://github.com/fantasticmao/csv-to-ical/blob/main/LICENSE)
 
 Copyright (c) 2023 fantasticmao

@@ -12,12 +12,16 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## 这是什么
 
-### 特性列表
+CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 服务，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。
 
-- [x] 支持本地 / 远程 csv 文件
-- [x] 支持农历事件
-- [x] 日期标签：公历日期、农历日期、公历生日（计算周岁）、农历生日（计算虚岁）
-- [x] 支持 i8n：英文、中文
+CSV-to-iCal 当前支持以下特性：
+
+- 支持本地 csv 文件 / 远程 csv 文件（通过 HTTP 协议访问）
+- 支持中国农历事件
+- 日期标签：公历日期、农历日期、公历生日（计算周岁）、农历生日（计算虚岁）
+- 支持 i8n：英文、中文
+
+[csv-to-ical.fantasticmao.cn](https://csv-to-ical.fantasticmao.cn) 是一个实际运行于我家 HomeLab 中的 CSV-to-iCal 服务（通过 Cloudflare Tunnel 暴露到公网），我会尽量保障它的可用性，你可以直接使用它，例如通过 <https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv> 可以转化和订阅 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日历事件。
 
 ## 快速开始
 
@@ -33,8 +37,6 @@ README [English](README.md) | [中文](README_ZH.md)
 ## 常见的问题和回答
 
 ## 许可声明
-
-[RFC 5545](https://datatracker.ietf.org/doc/html/rfc5545)
 
 CSV-to-iCal [License](https://github.com/fantasticmao/csv-to-ical/blob/main/LICENSE)
 
