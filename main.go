@@ -50,7 +50,7 @@ func main() {
 		}
 	}
 	app.RegisterRemoteHandler()
-	app.RegisterVersionHandler()
+	app.RegisterDefaultHandler()
 	app.StartServer(appConfig.BindAddress)
 	fmt.Printf("start HTTP server success, bind address: %v\n", appConfig.BindAddress)
 

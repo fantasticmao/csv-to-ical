@@ -20,7 +20,12 @@ func StartServer(addr string) {
 	}()
 }
 
-func RegisterVersionHandler() {
+func RegisterDefaultHandler() {
+	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
+		writeResponse(writer, fmt.Sprintf(`If you see this message, the %v is successfully installed and working.
+For online documentation and support please refer to https://github.com/fantasticmao/csv-to-ical.
+`, common.Name))
+	})
 	http.HandleFunc("/version", func(writer http.ResponseWriter, request *http.Request) {
 		writeResponse(writer, fmt.Sprintf("%v %v %v-%v with %v built on commit %v at %v\n",
 			common.Name, common.Version, runtime.GOOS, runtime.GOARCH, runtime.Version(),
