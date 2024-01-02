@@ -5,6 +5,17 @@ import (
 	"time"
 )
 
+// SolarToLunar 公历转农历
+func SolarToLunar(time time.Time) (year, month, day int, isLeap bool) {
+	solar := lunarsolar.Solar{
+		SolarYear:  time.Year(),
+		SolarMonth: int(time.Month()),
+		SolarDay:   time.Day(),
+	}
+	lunar := lunarsolar.SolarToLunar(solar)
+	return lunar.LunarYear, lunar.LunarMonth, lunar.LunarDay, lunar.IsLeap
+}
+
 // LunarToSolar 农历转公历，并新增年份
 func LunarToSolar(year, month, day, addYears int) time.Time {
 	lunar := lunarsolar.Lunar{

@@ -6,6 +6,35 @@ import (
 	"time"
 )
 
+func TestSolarToLunar(t *testing.T) {
+	type args struct {
+		time time.Time
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantYear   int
+		wantMonth  int
+		wantDay    int
+		wantIsLeap bool
+	}{
+		{"2023-8-15", args{NewDate(2023, 8, 15)}, 2023, 6, 29, false},
+		{"2024-8-15", args{NewDate(2024, 8, 15)}, 2024, 7, 12, false},
+		{"2025-8-15", args{NewDate(2025, 8, 15)}, 2025, 6, 22, true},
+		{"2026-8-15", args{NewDate(2026, 8, 15)}, 2026, 7, 3, false},
+		{"2027-8-15", args{NewDate(2027, 8, 15)}, 2027, 7, 14, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotYear, gotMonth, gotDay, gotIsLeap := SolarToLunar(tt.args.time)
+			assert.Equalf(t, tt.wantYear, gotYear, "SolarToLunar(%v)", tt.args.time)
+			assert.Equalf(t, tt.wantMonth, gotMonth, "SolarToLunar(%v)", tt.args.time)
+			assert.Equalf(t, tt.wantDay, gotDay, "SolarToLunar(%v)", tt.args.time)
+			assert.Equalf(t, tt.wantIsLeap, gotIsLeap, "SolarToLunar(%v)", tt.args.time)
+		})
+	}
+}
+
 func TestLunarToSolar(t *testing.T) {
 	type args struct {
 		year  int

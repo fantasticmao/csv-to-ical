@@ -21,10 +21,11 @@ func convertForSolar(event csv.Event, language common.Language, recurCnt int, ho
 
 func convertForLunar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
+	lunarYear, _, _, _ := common.SolarToLunar(now)
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCnt; i++ {
 		// FIXME 是否需要回溯过往年份？
-		startTime := common.LunarToSolar(now.Year(), event.Month, event.Day, i)
+		startTime := common.LunarToSolar(lunarYear, event.Month, event.Day, i)
 
 		summary := event.Name
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
@@ -57,10 +58,11 @@ func convertForBirthdaySolar(event csv.Event, language common.Language, recurCnt
 
 func convertForBirthdayLunar(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
 	now := time.Now()
+	lunarYear, _, _, _ := common.SolarToLunar(now)
 	var cmpEvents []ical.ComponentEvent
 	for i := 0; i < recurCnt; i++ {
 		// FIXME 是否需要回溯过往年份？
-		startTime := common.LunarToSolar(now.Year(), event.Month, event.Day, i)
+		startTime := common.LunarToSolar(lunarYear, event.Month, event.Day, i)
 
 		var summary string
 		if event.Year > 0 {
