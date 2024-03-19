@@ -27,7 +27,7 @@ func ParseLanguage(language string) (Language, error) {
 	switch strings.ToLower(language) {
 	case "en":
 		return En, nil
-	case "zh_cn":
+	case "zh-cn", "zh_cn":
 		return ZhCn, nil
 	default:
 		return "", fmt.Errorf("unsupported language: '%v'", language)
