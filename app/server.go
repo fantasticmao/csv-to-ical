@@ -23,7 +23,7 @@ func StartServer(addr string) {
 func RegisterDefaultHandler() {
 	http.HandleFunc("/", func(writer http.ResponseWriter, request *http.Request) {
 		writeResponse(writer, fmt.Sprintf(`If you see this message, the %v is successfully installed and working.
-For online documentation and support please refer to https://github.com/fantasticmao/csv-to-ical
+For more informations see https://github.com/fantasticmao/csv-to-ical
 `, common.Name))
 	})
 	http.HandleFunc("/version", func(writer http.ResponseWriter, request *http.Request) {
