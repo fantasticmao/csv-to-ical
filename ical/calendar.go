@@ -8,14 +8,12 @@ import (
 	"time"
 )
 
-type Object struct {
-	ProdId     string
-	Version    string
-	Components []ComponentEvent
-}
+var iCalendarObjectTemple *template.Template
+var iCalendarComponentTemple *template.Template
 
-func (obj Object) String() string {
-	temp, err := template.New("iCalendarObject").Parse(`BEGIN:VCALENDAR
+func init() {
+	var err error
+	iCalendarObjectTemple, err = template.New("iCalendarObject").Parse(`BEGIN:VCALENDAR
 PRODID:{{ .ProdId }}
 VERSION:{{ .Version }}
 {{- range .Components }}
@@ -27,8 +25,31 @@ END:VCALENDAR
 		panic(err)
 	}
 
+	iCalendarComponentTemple, err = template.New("iCalendarComponent").Parse(`BEGIN:VEVENT
+DTSTAMP;VALUE=DATE:{{ .DtStamp }}
+UID:{{ .Uid }}
+DTSTART;VALUE=DATE:{{ .DtStart }}
+CLASS:{{ .Class }}
+SUMMARY;LANGUAGE={{ .Language }}:{{ .Summary }}
+TRANSP:{{ .Transp }}
+{{- if .RecurCount }}
+RRULE:FREQ=YEARLY;COUNT={{ .RecurCount }}
+{{- end }}
+END:VEVENT`)
+	if err != nil {
+		panic(err)
+	}
+}
+
+type Object struct {
+	ProdId     string
+	Version    string
+	Components []ComponentEvent
+}
+
+func (obj Object) String() string {
 	output := &bytes.Buffer{}
-	if err = temp.Execute(output, obj); err != nil {
+	if err := iCalendarObjectTemple.Execute(output, obj); err != nil {
 		panic(err)
 	}
 	return output.String()
@@ -54,23 +75,8 @@ type ComponentEvent struct {
 }
 
 func (cmpEvent ComponentEvent) String() string {
-	temp, err := template.New("iCalendarComponents").Parse(`BEGIN:VEVENT
-DTSTAMP;VALUE=DATE:{{ .DtStamp }}
-UID:{{ .Uid }}
-DTSTART;VALUE=DATE:{{ .DtStart }}
-CLASS:{{ .Class }}
-SUMMARY;LANGUAGE={{ .Language }}:{{ .Summary }}
-TRANSP:{{ .Transp }}
-{{- if .RecurCount }}
-RRULE:FREQ=YEARLY;COUNT={{ .RecurCount }}
-{{- end }}
-END:VEVENT`)
-	if err != nil {
-		panic(err)
-	}
-
 	output := &bytes.Buffer{}
-	if err = temp.Execute(output, cmpEvent); err != nil {
+	if err := iCalendarComponentTemple.Execute(output, cmpEvent); err != nil {
 		panic(err)
 	}
 	return output.String()
