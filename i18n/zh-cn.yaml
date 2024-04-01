@@ -1,0 +1,15 @@
+solar:
+  summary: "{{ .Name }}"
+  summary_with_age: "{{ .Name }}"
+
+lunar:
+  summary: "{{ .Name }}"
+  summary_with_age: "{{ .Name }}"
+
+birthday_solar:
+  summary: "{{ .Name }}的生日"
+  summary_with_age: "{{ .Name }}的 {{ .Age }} 岁生日"
+
+birthday_lunar:
+  summary: "{{ .Name }}的农历生日"
+  summary_with_age: "{{ .Name }}的 {{ .Age }} 岁农历生日"

@@ -1,0 +1,15 @@
+solar:
+  summary: "{{ .Name }}"
+  summary_with_age: "{{ .Name }}"
+
+lunar:
+  summary: "{{ .Name }}"
+  summary_with_age: "{{ .Name }}"
+
+birthday_solar:
+  summary: "{{ .Name }}'s Birthday"
+  summary_with_age: "{{ .Name }}'s {{ .Age }}th Birthday"
+
+birthday_lunar:
+  summary: "{{ .Name }}'s Chinese Birthday"
+  summary_with_age: "{{ .Name }}'s {{ .Age }}th Chinese Birthday"
