@@ -1,9 +1,9 @@
 package app
 
 import (
-	"fmt"
 	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/csv"
+	"github.com/fantasticmao/csv-to-ical/i18n"
 	"github.com/fantasticmao/csv-to-ical/ical"
 	"time"
 )
@@ -43,12 +43,18 @@ func convertForBirthdaySolar(event csv.Event, language common.Language, recurCnt
 		startTime := common.NewDate(now.Year()+i, event.Month, event.Day)
 
 		var summary string
+		var err error
 		if event.Year > 0 {
 			age := common.CalcAge(event.Year, event.Month, event.Day, startTime)
-			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][true], event.Name, age)
+			summary, err = i18n.Summary(language, event.CalendarType, event.Name, age)
 		} else {
-			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][false], event.Name)
+			summary, err = i18n.Summary(language, event.CalendarType, event.Name, -1)
 		}
+		if err != nil {
+			// FIXME 兼容错误处理
+			summary = err.Error()
+		}
+
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
 		cmpEvent := ical.NewComponentEvent(uid, language, summary, 0, now, startTime)
 		cmpEvents = append(cmpEvents, cmpEvent)
@@ -65,12 +71,18 @@ func convertForBirthdayLunar(event csv.Event, language common.Language, recurCnt
 		startTime := common.LunarToSolar(lunarYear, event.Month, event.Day, i)
 
 		var summary string
+		var err error
 		if event.Year > 0 {
 			age := common.CalcLunarAge(event.Year, startTime)
-			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][true], event.Name, age)
+			summary, err = i18n.Summary(language, event.CalendarType, event.Name, age)
 		} else {
-			summary = fmt.Sprintf(common.SummaryMap[language][event.CalendarType][false], event.Name)
+			summary, err = i18n.Summary(language, event.CalendarType, event.Name, -1)
 		}
+		if err != nil {
+			// FIXME 兼容错误处理
+			summary = err.Error()
+		}
+
 		uid := ical.FormatUid(event.Name, startTime, event.CalendarType, host)
 		cmpEvent := ical.NewComponentEvent(uid, language, summary, 0, now, startTime)
 		cmpEvents = append(cmpEvents, cmpEvent)

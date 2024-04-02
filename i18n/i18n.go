@@ -11,27 +11,12 @@ import (
 
 var t = template.New("i18n")
 
-func namingTemplate(language common.Language, calType common.CalendarType, addAge bool) string {
-	if addAge {
-		return fmt.Sprintf("%v:%v:summary_with_age", language, calType)
-	} else {
-		return fmt.Sprintf("%v:%v:summary", language, calType)
-	}
+type stuff struct {
+	Summary        string `yaml:"summary"`
+	SummaryWithAge string `yaml:"summary_with_age"`
 }
 
-func Summary(language common.Language, calType common.CalendarType, name string, age int) (string, error) {
-	data := map[string]interface{}{
-		"Name": name,
-		"Age":  age,
-	}
-
-	output := &bytes.Buffer{}
-	templateName := namingTemplate(language, calType, age > 0)
-	if err := t.ExecuteTemplate(output, templateName, data); err != nil {
-		return "", err
-	}
-	return output.String(), nil
-}
+type stuffs map[string]stuff
 
 //go:embed *.yaml
 var i18nFs embed.FS
@@ -50,39 +35,65 @@ func init() {
 		if info.IsDir() {
 			continue
 		}
-
 		fileName := info.Name()
-		lang := fileName[:len(fileName)-len(".yaml")]
-		language, err := common.ParseLanguage(lang)
+
+		language, err := parseLanguage(fileName)
 		if err != nil {
 			panic(err)
 		}
 
-		data, err := i18nFs.ReadFile(fileName)
+		stuffs, err := parseStuffs(fileName)
 		if err != nil {
 			panic(err)
 		}
 
-		summaryMap := make(map[string]map[string]string)
-		if err = yaml.Unmarshal(data, summaryMap); err != nil {
-			panic(err)
-		}
-
-		for calTypeStr, subMap := range summaryMap {
+		for calTypeStr, stuff := range *stuffs {
 			calType, err := common.ParseCalendarType(calTypeStr)
 			if err != nil {
 				panic(err)
 			}
 
-			for key, val := range subMap {
-				var name string
-				if key == "summary" {
-					name = namingTemplate(language, calType, false)
-				} else if key == "summary_with_age" {
-					name = namingTemplate(language, calType, true)
-				}
-				template.Must(t.New(name).Parse(val))
-			}
+			name := namingTemplate(language, calType, false)
+			template.Must(t.New(name).Parse(stuff.Summary))
+
+			name = namingTemplate(language, calType, true)
+			template.Must(t.New(name).Parse(stuff.SummaryWithAge))
 		}
 	}
+}
+
+func parseLanguage(fileName string) (common.Language, error) {
+	lang := fileName[:len(fileName)-len(".yaml")]
+	return common.ParseLanguage(lang)
+}
+
+func parseStuffs(fileName string) (*stuffs, error) {
+	if data, err := i18nFs.ReadFile(fileName); err != nil {
+		return nil, err
+	} else {
+		stuffs := &stuffs{}
+		if err = yaml.Unmarshal(data, stuffs); err != nil {
+			return nil, err
+		} else {
+			return stuffs, err
+		}
+	}
+}
+
+func namingTemplate(language common.Language, calType common.CalendarType, withAge bool) string {
+	return fmt.Sprintf("%v:%v:%v", language, calType, withAge)
+}
+
+func Summary(language common.Language, calType common.CalendarType, name string, age int) (string, error) {
+	data := map[string]interface{}{
+		"Name": name,
+		"Age":  age,
+	}
+
+	output := &bytes.Buffer{}
+	templateName := namingTemplate(language, calType, age > 0)
+	if err := t.ExecuteTemplate(output, templateName, data); err != nil {
+		return "", err
+	}
+	return output.String(), nil
 }
