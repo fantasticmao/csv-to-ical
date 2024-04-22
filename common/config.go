@@ -3,6 +3,7 @@ package common
 import (
 	"errors"
 	"fmt"
+	"github.com/fantasticmao/csv-to-ical/log"
 	"gopkg.in/yaml.v3"
 	"os"
 )
@@ -59,7 +60,7 @@ func ParseConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			fmt.Printf("config file: '%v' does not exist, falling back to default settings\n", path)
+			log.Info("config file: '%v' does not exist, falling back to default settings", path)
 			data = []byte("")
 		} else {
 			return nil, err

@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/fantasticmao/csv-to-ical/app"
 	"github.com/fantasticmao/csv-to-ical/common"
+	"github.com/fantasticmao/csv-to-ical/log"
 	"os"
 	"os/signal"
 	"path"
@@ -25,14 +25,14 @@ func init() {
 
 func main() {
 	if showVersion {
-		fmt.Printf("%v %v %v-%v with %v built on commit %v at %v\n", common.Name, common.Version,
+		log.Info("%v %v %v-%v with %v built on commit %v at %v", common.Name, common.Version,
 			runtime.GOOS, runtime.GOARCH, runtime.Version(), common.CommitHash, common.BuildTime)
 		return
 	}
 
 	if configDir == "" {
 		if homeDir, err := os.UserHomeDir(); err != nil {
-			fatal("get user home directory error: %v\n", err.Error())
+			log.Panic(err, "get user home directory error")
 		} else {
 			configDir = path.Join(homeDir, ".config", common.Name)
 		}
@@ -40,26 +40,21 @@ func main() {
 
 	appConfig, err := common.ParseConfig(path.Join(configDir, "config.yaml"))
 	if err != nil {
-		fatal("parse config file error: %v\n", err.Error())
+		log.Panic(err, "parse config file error")
 	}
 
 	for owner, provider := range appConfig.CsvProviders {
 		err = app.RegisterLocalHandler(configDir, owner, provider)
 		if err != nil {
-			fatal("register HTTP handler error: %v\n", err.Error())
+			log.Panic(err, "register HTTP handler error: %v")
 		}
 	}
 	app.RegisterRemoteHandler()
 	app.RegisterDefaultHandler()
 	app.StartServer(appConfig.BindAddress)
-	fmt.Printf("start HTTP server success, bind address: %v\n", appConfig.BindAddress)
+	log.Info("start HTTP server success, bind address: %v", appConfig.BindAddress)
 
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	<-sigCh
-}
-
-func fatal(format string, a ...interface{}) {
-	_, _ = fmt.Fprintf(os.Stderr, format, a...)
-	os.Exit(1)
 }

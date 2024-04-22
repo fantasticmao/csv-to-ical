@@ -53,7 +53,7 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 
 		if i == 0 {
 			for idx, v := range record {
-				switch v {
+				switch strings.ToLower(v) {
 				case "name":
 					nameIdx = idx
 				case "month":
@@ -62,7 +62,7 @@ func parseEvent(reader io.Reader) ([]Event, error) {
 					dayIdx = idx
 				case "year":
 					yearIdx = idx
-				case "calendar_type":
+				case "calendar_type", "calendarType":
 					calTypeIdx = idx
 				}
 			}

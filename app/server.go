@@ -5,6 +5,7 @@ import (
 	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/csv"
 	"github.com/fantasticmao/csv-to-ical/ical"
+	"github.com/fantasticmao/csv-to-ical/log"
 	"net/http"
 	"path"
 	"runtime"
@@ -15,7 +16,7 @@ func StartServer(addr string) {
 	go func() {
 		err := http.ListenAndServe(addr, nil)
 		if err != nil {
-			fmt.Printf("start HTTP server error: %v\n", err.Error())
+			log.Error("start HTTP server error: %v", err.Error())
 		}
 	}()
 }
@@ -141,7 +142,7 @@ func csvToIcal(event csv.Event, language common.Language, recurCnt int, host str
 func writeResponse(writer http.ResponseWriter, response string) {
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
 	if _, err := fmt.Fprintln(writer, response); err != nil {
-		fmt.Printf("write HTTP response error: %v\n", err.Error())
+		log.Error("write HTTP response error: %v", err.Error())
 	}
 }
 
@@ -149,6 +150,6 @@ func writeResponse400(writer http.ResponseWriter, response string) {
 	writer.WriteHeader(http.StatusBadRequest)
 	writer.Header().Add("Content-Type", "text/plain; charset=UTF-8")
 	if _, err := fmt.Fprintln(writer, response); err != nil {
-		fmt.Printf("write HTTP response error: %v\n", err.Error())
+		log.Error("write HTTP response error: %v", err.Error())
 	}
 }
