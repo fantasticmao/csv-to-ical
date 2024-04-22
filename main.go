@@ -46,7 +46,7 @@ func main() {
 	for owner, provider := range appConfig.CsvProviders {
 		err = app.RegisterLocalHandler(configDir, owner, provider)
 		if err != nil {
-			log.Panic(err, "register HTTP handler error: %v")
+			log.Panic(err, "register HTTP handler error")
 		}
 	}
 	app.RegisterRemoteHandler()
