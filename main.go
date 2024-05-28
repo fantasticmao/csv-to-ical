@@ -5,6 +5,7 @@ import (
 	"github.com/fantasticmao/csv-to-ical/app"
 	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/fantasticmao/csv-to-ical/log"
+	"github.com/gin-gonic/gin"
 	"os"
 	"os/signal"
 	"path"
@@ -43,15 +44,28 @@ func main() {
 		log.Panic(err, "parse config file error")
 	}
 
+	r := gin.Default()
+	r.Use(func(c *gin.Context) {
+		c.Header("Content-Type", "text/plain; charset=UTF-8")
+	})
+
+	r.GET("/", app.HomeHandler())
+	r.GET("/version", app.VersionHandler())
+	r.GET("/remote", app.RemoteHandler())
 	for owner, provider := range appConfig.CsvProviders {
-		err = app.RegisterLocalHandler(configDir, owner, provider)
-		if err != nil {
+		if handler, err := app.LocalHandler(configDir, provider); err != nil {
 			log.Panic(err, "register HTTP handler error")
+		} else {
+			r.GET("/local/"+owner, handler)
 		}
 	}
-	app.RegisterRemoteHandler()
-	app.RegisterDefaultHandler()
-	app.StartServer(appConfig.BindAddress)
+
+	go func() {
+		if err := r.Run(appConfig.BindAddress); err != nil {
+			log.Error("start HTTP server error: %v", err.Error())
+		}
+	}()
+
 	log.Info("start HTTP server success, bind address: %v", appConfig.BindAddress)
 
 	sigCh := make(chan os.Signal)

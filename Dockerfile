@@ -9,6 +9,8 @@ RUN go mod download && make build-docker
 
 FROM alpine:3.19
 
+ENV GIN_MODE=release
+
 COPY --from=build /app/bin/csv-to-ical-build-docker /bin/csv-to-ical
 
 RUN apk add --no-cache tzdata && mkdir /opt/csv-to-ical
