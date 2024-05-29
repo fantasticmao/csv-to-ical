@@ -70,7 +70,11 @@ func RemoteHandler() gin.HandlerFunc {
 		}
 
 		obj := ical.NewObject(components)
-		c.String(http.StatusOK, obj.String())
+		if response, err := obj.Transform(); err != nil {
+			c.String(http.StatusInternalServerError, err.Error())
+		} else {
+			c.String(http.StatusOK, response)
+		}
 	}
 }
 
@@ -100,7 +104,11 @@ func LocalHandler(configDir string, provider common.CsvProvider) (gin.HandlerFun
 		}
 
 		obj := ical.NewObject(components)
-		c.String(http.StatusOK, obj.String())
+		if response, err := obj.Transform(); err != nil {
+			c.String(http.StatusInternalServerError, err.Error())
+		} else {
+			c.String(http.StatusOK, response)
+		}
 	}, nil
 }
 

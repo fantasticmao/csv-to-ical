@@ -17,7 +17,7 @@ func init() {
 PRODID:{{ .ProdId }}
 VERSION:{{ .Version }}
 {{- range .Components }}
-{{ . }}
+{{ .Transform }}
 {{- end }}
 END:VCALENDAR
 `))
@@ -41,12 +41,13 @@ type Object struct {
 	Components []ComponentEvent
 }
 
-func (obj Object) String() string {
+func (obj Object) Transform() (string, error) {
 	output := &bytes.Buffer{}
 	if err := t.ExecuteTemplate(output, nameObject, obj); err != nil {
-		panic(err)
+		return "", err
+	} else {
+		return output.String(), nil
 	}
-	return output.String()
 }
 
 func NewObject(components []ComponentEvent) Object {
@@ -68,12 +69,13 @@ type ComponentEvent struct {
 	RecurCount int
 }
 
-func (cmpEvent ComponentEvent) String() string {
+func (cmpEvent ComponentEvent) Transform() (string, error) {
 	output := &bytes.Buffer{}
 	if err := t.ExecuteTemplate(output, nameComponent, cmpEvent); err != nil {
-		panic(err)
+		return "", err
+	} else {
+		return output.String(), nil
 	}
-	return output.String()
 }
 
 func NewComponentEvent(uid string, language common.Language, summary string, recurCnt int,

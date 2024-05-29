@@ -5,6 +5,7 @@ import (
 	"embed"
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/common"
+	"github.com/fantasticmao/csv-to-ical/log"
 	"gopkg.in/yaml.v3"
 	"text/template"
 )
@@ -24,13 +25,13 @@ var i18nFs embed.FS
 func init() {
 	entries, err := i18nFs.ReadDir(".")
 	if err != nil {
-		panic(err)
+		log.Panic(err, "read i18n files error")
 	}
 
 	for _, entry := range entries {
 		info, err := entry.Info()
 		if err != nil {
-			panic(err)
+			log.Panic(err, "get i18n file info error")
 		}
 		if info.IsDir() {
 			continue
@@ -39,18 +40,18 @@ func init() {
 
 		language, err := parseLanguage(fileName)
 		if err != nil {
-			panic(err)
+			log.Panic(err, "parse i18n language error, file name: '%v'", fileName)
 		}
 
 		stuffs, err := parseStuffs(fileName)
 		if err != nil {
-			panic(err)
+			log.Panic(err, "parse i18n content error, file name: '%v'", fileName)
 		}
 
 		for calTypeStr, stuff := range *stuffs {
 			calType, err := common.ParseCalendarType(calTypeStr)
 			if err != nil {
-				panic(err)
+				log.Panic(err, "parse i18n calendar type error, type string: '%v'", calTypeStr)
 			}
 
 			name := namingTemplate(language, calType, false)

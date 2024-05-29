@@ -39,9 +39,10 @@ func main() {
 		}
 	}
 
-	appConfig, err := common.ParseConfig(path.Join(configDir, "config.yaml"))
+	configPath := path.Join(configDir, "config.yaml")
+	appConfig, err := common.ParseConfig(configPath)
 	if err != nil {
-		log.Panic(err, "parse config file error")
+		log.Panic(err, "parse config file error, config path: '%v'", configPath)
 	}
 
 	r := gin.Default()
