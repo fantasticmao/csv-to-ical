@@ -49,17 +49,19 @@ func main() {
 	r.Use(func(c *gin.Context) {
 		c.Header("Content-Type", "text/plain; charset=UTF-8")
 	})
+	metrics := app.MetricMiddleware()
 
-	r.GET("/", app.HomeHandler())
-	r.GET("/version", app.VersionHandler())
-	r.GET("/remote", app.RemoteHandler())
+	r.GET("/", metrics, app.HomeHandler())
+	r.GET("/version", metrics, app.VersionHandler())
+	r.GET("/remote", metrics, app.RemoteHandler())
 	for owner, provider := range appConfig.CsvProviders {
 		if handler, err := app.LocalHandler(configDir, provider); err != nil {
 			log.Panic(err, "register HTTP handler error")
 		} else {
-			r.GET("/local/"+owner, handler)
+			r.GET("/local/"+owner, metrics, handler)
 		}
 	}
+	r.GET("/metrics", app.MetricHandler())
 
 	go func() {
 		if err := r.Run(appConfig.BindAddress); err != nil {
