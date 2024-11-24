@@ -18,16 +18,17 @@ END:VCALENDAR
 }
 
 func TestComponentEvent_String(t *testing.T) {
-	datetime := common.NewDate(2023, 10, 31)
+	date := common.NewDate(2023, 10, 31)
 
 	cmpEvent := NewComponentEvent("Tom-20231031-birthday_solar@localhost", common.En,
-		"Tom’s 18th Birthday", 5, datetime, datetime)
+		"Tom’s 18th Birthday", 5, date, date)
 	str, err := cmpEvent.Transform()
 	assert.Nil(t, err)
 	assert.Equal(t, `BEGIN:VEVENT
 DTSTAMP;VALUE=DATE:20231031
 UID:Tom-20231031-birthday_solar@localhost
-DTSTART;VALUE=DATE:20231031
+DTSTART:20231031T080000
+DTEND:20231031T235959
 CLASS:PUBLIC
 SUMMARY;LANGUAGE=en:Tom’s 18th Birthday
 TRANSP:TRANSPARENT
@@ -35,13 +36,14 @@ RRULE:FREQ=YEARLY;COUNT=5
 END:VEVENT`, str)
 
 	cmpEvent = NewComponentEvent("小明-20231031-birthday_lunar@localhost", common.ZhCn,
-		"小明的18岁农历生日", 0, datetime, datetime)
+		"小明的18岁农历生日", 0, date, date)
 	str, err = cmpEvent.Transform()
 	assert.Nil(t, err)
 	assert.Equal(t, `BEGIN:VEVENT
 DTSTAMP;VALUE=DATE:20231031
 UID:小明-20231031-birthday_lunar@localhost
-DTSTART;VALUE=DATE:20231031
+DTSTART:20231031T080000
+DTEND:20231031T235959
 CLASS:PUBLIC
 SUMMARY;LANGUAGE=zh_CN:小明的18岁农历生日
 TRANSP:TRANSPARENT

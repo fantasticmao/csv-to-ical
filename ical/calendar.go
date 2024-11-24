@@ -25,7 +25,8 @@ END:VCALENDAR
 	template.Must(t.New(nameComponent).Parse(`BEGIN:VEVENT
 DTSTAMP;VALUE=DATE:{{ .DtStamp }}
 UID:{{ .Uid }}
-DTSTART;VALUE=DATE:{{ .DtStart }}
+DTSTART:{{ .DtStart }}
+DTEND:{{ .DtEnd }}
 CLASS:{{ .Class }}
 SUMMARY;LANGUAGE={{ .Language }}:{{ .Summary }}
 TRANSP:{{ .Transp }}
@@ -62,6 +63,7 @@ type ComponentEvent struct {
 	DtStamp    string
 	Uid        string
 	DtStart    string
+	DtEnd      string
 	Class      string
 	Language   common.Language
 	Summary    string
@@ -80,10 +82,13 @@ func (cmpEvent ComponentEvent) Transform() (string, error) {
 
 func NewComponentEvent(uid string, language common.Language, summary string, recurCnt int,
 	now, start time.Time) ComponentEvent {
+	start = common.ResetTime(start, 8, 0, 0)
+	end := common.ResetTime(start, 23, 59, 59)
 	return ComponentEvent{
 		DtStamp:    common.FormatDate(now),
 		Uid:        uid,
-		DtStart:    common.FormatDate(start),
+		DtStart:    common.FormatDatetime(start),
+		DtEnd:      common.FormatDatetime(end),
 		Class:      "PUBLIC",
 		Language:   language,
 		Summary:    summary,
@@ -94,6 +99,6 @@ func NewComponentEvent(uid string, language common.Language, summary string, rec
 
 // FormatUid generate globally unique identifier for the calendar component,
 // for more details see https://datatracker.ietf.org/doc/html/rfc5545#section-3.8.4.7
-func FormatUid(name string, datetime time.Time, calendarType common.CalendarType, host string) string {
-	return fmt.Sprintf("%s-%s-%s@%s", name, common.FormatDate(datetime), calendarType, host)
+func FormatUid(name string, date time.Time, calendarType common.CalendarType, host string) string {
+	return fmt.Sprintf("%s-%s-%s@%s", name, common.FormatDate(date), calendarType, host)
 }

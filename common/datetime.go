@@ -55,6 +55,14 @@ func NewDate(year, month, day int) time.Time {
 	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
 }
 
-func FormatDate(time time.Time) string {
-	return time.Format("20060102")
+func ResetTime(date time.Time, hour, min, sec int) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), hour, min, sec, 0, date.Location())
+}
+
+func FormatDate(date time.Time) string {
+	return date.Format("20060102")
+}
+
+func FormatDatetime(time time.Time) string {
+	return time.Format("20060102T150405")
 }

@@ -115,17 +115,37 @@ func TestCalcLunarAge(t *testing.T) {
 }
 
 func TestNewDate(t *testing.T) {
-	datetime := NewDate(2023, 10, 31)
+	date := NewDate(2023, 10, 31)
+
+	assert.Equal(t, 2023, date.Year())
+	assert.Equal(t, time.October, date.Month())
+	assert.Equal(t, 31, date.Day())
+}
+
+func TestResetTime(t *testing.T) {
+	date := NewDate(2023, 10, 31)
+	datetime := ResetTime(date, 15, 20, 30)
 
 	assert.Equal(t, 2023, datetime.Year())
 	assert.Equal(t, time.October, datetime.Month())
 	assert.Equal(t, 31, datetime.Day())
+	assert.Equal(t, 15, datetime.Hour())
+	assert.Equal(t, 20, datetime.Minute())
+	assert.Equal(t, 30, datetime.Second())
 }
 
-func TestFormatTime(t *testing.T) {
+func TestFormatDate(t *testing.T) {
 	datetime, err := time.Parse("2006-01-02", "2023-10-31")
 	assert.Nil(t, err)
 
-	timeStr := FormatDate(datetime)
-	assert.Equal(t, "20231031", timeStr)
+	dateStr := FormatDate(datetime)
+	assert.Equal(t, "20231031", dateStr)
+}
+
+func TestFormatDateTime(t *testing.T) {
+	datetime, err := time.Parse("2006-01-02 15-04-05", "1997-07-14 13-30-00")
+	assert.Nil(t, err)
+
+	datetimeStr := FormatDatetime(datetime)
+	assert.Equal(t, "19970714T133000", datetimeStr)
 }
