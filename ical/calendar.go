@@ -82,7 +82,7 @@ func (cmpEvent ComponentEvent) Transform() (string, error) {
 
 func NewComponentEvent(uid string, language common.Language, summary string, recurCnt int,
 	now, start time.Time) ComponentEvent {
-	start = common.ResetTime(start, 8, 0, 0)
+	start = common.ResetTime(start, 9, 0, 0)
 	end := common.ResetTime(start, 23, 59, 59)
 	return ComponentEvent{
 		DtStamp:    common.FormatDate(now),
