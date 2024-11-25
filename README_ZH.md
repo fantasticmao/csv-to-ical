@@ -12,9 +12,9 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## 这是什么
 
-CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 服务，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以在 iOS 日历 / Google 日历中通过 URL [https://csv-to-ical.fantasticmao.cn/remote?url=....../calendar_test.csv](https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv) 来订阅 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日历事件。
+CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 服务，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以通过订阅 URL [https://csv-to-ical.fantasticmao.cn/remote?url=....../calendar_test.csv](https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv) 来将 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日程事件导入到你的 iOS 日历 / Google 日历中。
 
-[csv-to-ical.fantasticmao.cn](https://csv-to-ical.fantasticmao.cn) 是一个为普通用户提供的开箱即用的 CSV-to-iCal 服务实例，实际运行于我家的 HomeLab，通过 Cloudflare Tunnel 暴露到公网。
+[csv-to-ical.fantasticmao.cn](https://csv-to-ical.fantasticmao.cn) 是一个为普通用户提供的开箱即用的 CSV-to-iCal 服务实例，实际运行于我家的 HomeLab，并通过 Cloudflare Tunnel 暴露到公网。
 
 CSV-to-iCal 当前支持以下特性：
 
