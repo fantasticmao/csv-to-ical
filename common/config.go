@@ -24,13 +24,15 @@ type CsvProvider struct {
 	Url      string `yaml:"url"`
 	Language string `yaml:"language"`
 	RecurCnt int    `yaml:"recurCnt"`
+	BackCnt  int    `yaml:"backCnt"`
 }
 
 func (provider *CsvProvider) UnmarshalYAML(value *yaml.Node) error {
 	type rawCsvProvider CsvProvider
 	raw := rawCsvProvider{
 		Language: string(En),
-		RecurCnt: 5,
+		RecurCnt: 3,
+		BackCnt:  1,
 	}
 	if err := value.Decode(&raw); err != nil {
 		return err
@@ -49,8 +51,13 @@ func (cfg *Config) validate() error {
 		}
 		if val.RecurCnt < 0 {
 			return fmt.Errorf("recurCnt in key: '%v' cannot be negative", key)
-		} else if val.RecurCnt > 10 {
-			return fmt.Errorf("recurCnt in key: '%v' cannot be grater than 10", key)
+		} else if val.RecurCnt > 5 {
+			return fmt.Errorf("recurCnt in key: '%v' cannot be grater than 5", key)
+		}
+		if val.BackCnt < 0 {
+			return fmt.Errorf("backCnt in key: '%v' cannot be negative", key)
+		} else if val.BackCnt > 3 {
+			return fmt.Errorf("backCnt in key: '%v' cannot be grater than 3", key)
 		}
 	}
 	return nil

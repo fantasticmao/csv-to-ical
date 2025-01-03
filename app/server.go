@@ -42,7 +42,7 @@ func RemoteHandler() gin.HandlerFunc {
 			return
 		}
 
-		recurCntParam := c.DefaultQuery("recurCnt", "5")
+		recurCntParam := c.DefaultQuery("recurCnt", "3")
 		recurCnt, err := strconv.Atoi(recurCntParam)
 		if err != nil {
 			c.String(http.StatusBadRequest, "query param: recurCnt error: %v", err.Error())
@@ -51,8 +51,23 @@ func RemoteHandler() gin.HandlerFunc {
 			if recurCnt < 0 {
 				c.String(http.StatusBadRequest, "query param: recurCnt cannot be negative")
 				return
-			} else if recurCnt > 10 {
-				c.String(http.StatusBadRequest, "query param: recurCnt cannot be grater than 10")
+			} else if recurCnt > 5 {
+				c.String(http.StatusBadRequest, "query param: recurCnt cannot be grater than 5")
+				return
+			}
+		}
+
+		backCntParam := c.DefaultQuery("backCnt", "1")
+		backCnt, err := strconv.Atoi(backCntParam)
+		if err != nil {
+			c.String(http.StatusBadRequest, "query param: backCnt error: %v", err.Error())
+			return
+		} else {
+			if backCnt < 0 {
+				c.String(http.StatusBadRequest, "query param: backCnt cannot be negative")
+				return
+			} else if backCnt > 3 {
+				c.String(http.StatusBadRequest, "query param: backCnt cannot be grater than 3")
 				return
 			}
 		}
@@ -65,7 +80,7 @@ func RemoteHandler() gin.HandlerFunc {
 
 		var components []ical.ComponentEvent
 		for _, event := range events {
-			cmpEvents := csvToIcal(event, language, recurCnt, c.Request.Host)
+			cmpEvents := csvToIcal(event, language, recurCnt, backCnt, c.Request.Host)
 			components = append(components, cmpEvents...)
 		}
 
@@ -99,7 +114,7 @@ func LocalHandler(configDir string, provider common.CsvProvider) (gin.HandlerFun
 		var components []ical.ComponentEvent
 		for _, event := range events {
 			language, _ := common.ParseLanguage(provider.Language)
-			cmpEvents := csvToIcal(event, language, provider.RecurCnt, c.Request.Host)
+			cmpEvents := csvToIcal(event, language, provider.RecurCnt, provider.BackCnt, c.Request.Host)
 			components = append(components, cmpEvents...)
 		}
 
@@ -112,16 +127,16 @@ func LocalHandler(configDir string, provider common.CsvProvider) (gin.HandlerFun
 	}, nil
 }
 
-func csvToIcal(event csv.Event, language common.Language, recurCnt int, host string) []ical.ComponentEvent {
+func csvToIcal(event csv.Event, language common.Language, recurCnt, backCnt int, host string) []ical.ComponentEvent {
 	switch event.CalendarType {
 	case common.Solar:
-		return convertForSolar(event, language, recurCnt, host)
+		return convertForSolar(event, language, recurCnt, backCnt, host)
 	case common.Lunar:
-		return convertForLunar(event, language, recurCnt, host)
+		return convertForLunar(event, language, recurCnt, backCnt, host)
 	case common.BirthdaySolar:
-		return convertForBirthdaySolar(event, language, recurCnt, host)
+		return convertForBirthdaySolar(event, language, recurCnt, backCnt, host)
 	case common.BirthdayLunar:
-		return convertForBirthdayLunar(event, language, recurCnt, host)
+		return convertForBirthdayLunar(event, language, recurCnt, backCnt, host)
 	default:
 		return nil
 	}
