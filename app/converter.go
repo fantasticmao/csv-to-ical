@@ -73,7 +73,7 @@ func convertForBirthdayLunar(event csv.Event, language common.Language, recurCnt
 		var err error
 		if event.Year > 0 {
 			age := common.CalcLunarAge(event.Year, startDate)
-			if age < 0 {
+			if age < 1 {
 				continue
 			}
 			summary, err = i18n.Summary(language, event.CalendarType, event.Name, age)
