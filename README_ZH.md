@@ -26,7 +26,7 @@ CSV-to-iCal 当前支持以下特性：
 - [x] 支持最大 5 年的重复日程
 - [x] 支持最大 3 年的回溯日程
 
-### 下载安装
+## 下载安装
 
 <details>
 <summary>从源代码编译</summary>
@@ -149,7 +149,7 @@ start HTTP server success, bind address: 0.0.0.0:7788
 
 </details>
 
-### 使用说明
+## 使用说明
 
 **CSV 文件格式**
 
