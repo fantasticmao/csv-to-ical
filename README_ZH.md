@@ -12,7 +12,9 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## 这是什么
 
-CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 服务，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以通过订阅 URL <https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv> 来将 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日程事件导入到你的 iOS 日历 / Google 日历中。
+CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 应用程序，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以通过订阅 URL <https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv> 来将 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日程事件导入到你的 iOS 日历 / Google 日历中。
+
+![usage](usage.png)
 
 [csv-to-ical.fantasticmao.cn](https://csv-to-ical.fantasticmao.cn) 是一个为普通用户提供的开箱即用的 CSV-to-iCal 服务实例，实际运行于我家的 HomeLab，并通过 Cloudflare Tunnel 暴露到公网。
 
@@ -76,7 +78,7 @@ docker pull maomao233/csv-to-ical:latest
 docker run -d -p 7788:7788 -v /path/to/your/config/:/opt/csv-to-ical/ maomao233/csv-to-ical:latest
 ```
 
-请确保将 `/path/to/your/config` 替换为你的 `config.yaml` 所在的实际目录。容器内的 `config.yaml` 存放路径为 `/opt/csv-to-ical`。
+请确保将 `/path/to/your/config` 替换为你的 `config.yaml` 所在的实际目录。容器内的 `config.yaml` 存放目录为 `/opt/csv-to-ical`。
 
 </details>
 
@@ -145,7 +147,7 @@ start HTTP server success, bind address: 0.0.0.0:7788
 <details open>
 <summary>获取 iCal 订阅链接</summary>
 
-访问 <http://0.0.0.0:7788/remote?url=...> 或 <http://0.0.0.0:7788/local/my-local-calendar>，可以获取 iCal 订阅链接。
+通过访问 <http://0.0.0.0:7788/remote?url=...> 或 <http://0.0.0.0:7788/local/my-local-calendar>，可以获取 iCal 订阅链接。
 
 </details>
 
@@ -165,7 +167,7 @@ CSV 文件格式有特殊的要求，应当包含以下列：
 
 **CSV 文件示例**
 
-详情查看 <https://github.com/fantasticmao/csv-to-ical/blob/main/csv/testdata/calendar_test.csv>
+详情请查看 [calendar_test.csv](csv/testdata/calendar_test.csv)。
 
 **使用远程 CSV 文件**
 
@@ -176,14 +178,14 @@ https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv
 ```
 
 - `url`: 远程 CSV 文件的完整 URL。
-- `language` (可选): 事件语言，`en` (默认) 或 `zh-cn`。
+- `lang` (可选): 事件语言，`en` (默认) 或 `zh-cn`。
 - `recurCnt` (可选): 重复日程的最大年份数，默认为 3，最大 5。
 - `backCnt` (可选): 回溯日程的最大年份数，默认为 1，最大 3。
 
-例如，订阅一个中文的重复日程，最多回溯两年，最多重复五年：
+例如，订阅一个中文的重复日程，最多重复五年，最多回溯两年：
 
 ```
-https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv&language=zh-cn&recurCnt=5&backCnt=2
+https://<your-csv-to-ical-host>/remote?lang=zh-cn&recurCnt=5&backCnt=2&url=https://example.com/your-calendar.csv
 ```
 
 **使用本地 CSV 文件**

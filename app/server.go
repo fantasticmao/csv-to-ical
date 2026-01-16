@@ -14,7 +14,7 @@ import (
 func HomeHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.String(http.StatusOK, `If you see this message, the %v is successfully installed and working.
-For more informations see https://github.com/fantasticmao/csv-to-ical
+For more information see https://github.com/fantasticmao/csv-to-ical
 `, common.Name)
 	}
 }
