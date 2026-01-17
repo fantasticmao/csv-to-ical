@@ -211,7 +211,7 @@ https://<your-csv-to-ical-host>/local/my-local-calendar
 
 这里的 `my-local-calendar` 对应 `config.yaml` 中 `csv-providers` 下的键名。
 
-## 常见的问题和回答
+## 常见问题和回答
 
 Q: 为什么我的日历事件没有显示？
 
