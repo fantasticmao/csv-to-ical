@@ -13,8 +13,13 @@ import (
 
 func HomeHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.String(http.StatusOK, `If you see this message, the %v is successfully installed and working.
-For more information see https://github.com/fantasticmao/csv-to-ical
+		c.String(http.StatusOK, `If you see this message, the %v server is running properly.
+
+You can visit /version to see the version information.
+You can visit /remote?url={csv_url} to convert remote CSV to iCal format.
+You can visit /local/{csv_provider} to convert local CSV to iCal format.
+
+For more information, please visit <https://github.com/fantasticmao/csv-to-ical>.
 `, common.Name)
 	}
 }
