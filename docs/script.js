@@ -5,15 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
   const CALENDAR_TYPES = ['solar', 'lunar', 'birthday_solar', 'birthday_lunar'];
 
   let tableData = [
-    ['Name', 'Month', 'Day', 'Year', 'Calendar_Type'],
-    ['元旦', '1', '1', '2026', 'solar'],
-    ['春节', '1', '1', '2026', 'lunar'],
-    ['妇女节', '3', '8', '2026', 'solar'],
-    ['儿童节', '6', '1', '2026', 'solar'],
-    ['端午节', '5', '5', '2026', 'lunar'],
-    ['七夕节', '7', '7', '2026', 'lunar'],
-    ['中秋节', '8', '15', '2026', 'lunar'],
-    ['圣诞节', '12', '25', '2026', 'solar']
+    ["Name", "Month", "Day", "Year", "Calendar_Type"],
+    ["New Year's Day", "1", "1", "2026", "solar"],
+    ["Chinese New Year's Day", "1", "1", "2026", "lunar"],
+    ["Women's Day", "3", "8", "2026", "solar"],
+    ["Children's Day", "6", "1", "2026", "solar"],
+    ["Dragon Boat Festival", "5", "5", "2026", "lunar"],
+    ["Magpie Festival", "7", "7", "2026", "lunar"],
+    ["Mid-Autumn Festival", "8", "15", "2026", "lunar"],
+    ["Christmas Day", "12", "25", "2026", "solar"]
   ];
 
   // Find column indexes once
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         tableHtml += `<td>${cellContent}</td>`;
       });
-      tableHtml += `<td class="action-buttons"><button class="delete-row-btn" data-row-index="${rowIndex}">Delete</button><button class="add-next-row-btn" data-row-index="${rowIndex}">Add Next</button></td>`;
+      tableHtml += `<td class="action-buttons"><button class="add-next-row-btn" data-row-index="${rowIndex}">Add Next</button><button class="delete-row-btn" data-row-index="${rowIndex}">Delete</button></td>`;
       tableHtml += '</tr>';
     });
     tableHtml += '</tbody></table>';
