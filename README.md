@@ -179,8 +179,8 @@ https://<your-csv-to-ical-host>/remote?url=encode(https://example.com/your-calen
 https://<your-csv-to-ical-host>/remote?base64=encode(base64(your calendar csv content))
 ```
 
-- `url` (or `base64`): The URL encoding of the remote CSV file.
-- `base64` (or `url`): The URL encoding of the base64-encoded content of the remote CSV file.
+- `url` (or `base64`): URL encoding of the remote CSV file.
+- `base64` (or `url`): URL encoding of the base64-encoded content of the remote CSV file.
 - `lang` (optional): Event language, `en` (default) or `zh-cn`.
 - `recurCnt` (optional): Maximum number of years for recurring events, default is 3, max 5.
 - `backCnt` (optional): Maximum number of years for retrospective events, default is 1, max 3.
@@ -218,7 +218,7 @@ Here, `my-local-calendar` corresponds to the key name under `csv-providers` in `
 
 Q: Why aren't my calendar events displayed?
 
-A: Please check if your CSV file format is correct, especially if the columns `Name`, `Month`, `Day`, `Year`, `CalendarType` exist and the data format is correct. Also, check if the `file` path or `url` encode in `config.yaml` is correct.
+A: Please check if your CSV file format is correct, especially if the columns `Name`, `Month`, `Day`, `Year`, `CalendarType` exist and the data format is correct. Also, check if the `file` path or `url` encoding in `config.yaml` is correct.
 
 ---
 
