@@ -139,9 +139,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.removeChild(link);
   });
 
-  const getLinkBtn = document.getElementById('get-link-btn');
-  if (getLinkBtn) {
-    getLinkBtn.addEventListener('click', function () {
+  const getIcalBtn = document.getElementById('get-ical-btn');
+  if (getIcalBtn) {
+    getIcalBtn.addEventListener('click', function () {
       const csvContent = tableToCSV();
       try {
         const base64Content = btoa(csvContent);
@@ -151,6 +151,22 @@ document.addEventListener('DOMContentLoaded', function () {
       } catch (e) {
         console.error("Failed to encode CSV content: ", e);
         alert("Could not generate link due to an encoding error.");
+      }
+    });
+  }
+
+  const subscribeIcalBtn = document.getElementById('subscribe-ical-btn');
+  if (subscribeIcalBtn) {
+    subscribeIcalBtn.addEventListener('click', function () {
+      const csvContent = tableToCSV();
+      try {
+        const base64Content = btoa(csvContent);
+        const urlEncodedContent = encodeURIComponent(base64Content);
+        const webcalLink = `webcal://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
+        window.open(webcalLink, '_self'); // Use _self to prompt subscription directly
+      } catch (e) {
+        console.error("Failed to encode CSV content for subscription: ", e);
+        alert("Could not generate subscription link due to an encoding error.");
       }
     });
   }
