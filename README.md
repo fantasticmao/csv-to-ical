@@ -12,7 +12,7 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## What is this
 
-CSV-to-iCal is a rapidly deployable Web application based on the Go language, used to convert [CSV](https://datatracker.ietf.org/doc/html/rfc4180) format content into [iCal](https://datatracker.ietf.org/doc/html/rfc5545) format online subscription links. For example, you can import calendar events from [calendar_test.csv](csv/testdata/calendar_test.csv) into your iOS Calendar / Google Calendar by subscribing to the URL <https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv>.
+CSV-to-iCal is a rapidly deployable Web application based on the Go language, used to convert [CSV](https://datatracker.ietf.org/doc/html/rfc4180) format content into [iCal](https://datatracker.ietf.org/doc/html/rfc5545) format online subscription links. For example, you can import calendar events from [calendar_test.csv](csv/testdata/calendar_test.csv) into your iOS Calendar / Google Calendar by subscribing to the URL <https://csv-to-ical.fantasticmao.cn/remote?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffantasticmao%2Fcsv-to-ical%2Fmain%2Fcsv%2Ftestdata%2Fcalendar_test.csv>.
 
 ![usage](usage.png)
 
@@ -147,7 +147,7 @@ start HTTP server success, bind address: 0.0.0.0:7788
 <details open>
 <summary>Get iCal subscription link</summary>
 
-By visiting <http://0.0.0.0:7788/remote?url=...> or <http://0.0.0.0:7788/local/my-local-calendar>, you can get the iCal subscription link.
+By visiting <http://0.0.0.0:7788/remote?url=encode(...)> or <http://0.0.0.0:7788/local/my-local-calendar>, you can get the iCal subscription link.
 
 </details>
 
@@ -174,7 +174,7 @@ For details, please see [calendar_test.csv](csv/testdata/calendar_test.csv).
 You can subscribe to a publicly accessible CSV file via the `remote` interface. For example, if you have a public CSV file link <https://example.com/your-calendar.csv>, you can use the following URL to access it:
 
 ```
-https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv
+https://<your-csv-to-ical-host>/remote?url=encode(https://example.com/your-calendar.csv)
 ```
 
 - `url`: The full URL of the remote CSV file.
@@ -185,7 +185,7 @@ https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv
 For example, to subscribe to a Chinese recurring event, repeating for a maximum of five years, and retrospecting for a maximum of two years:
 
 ```
-https://<your-csv-to-ical-host>/remote?lang=zh-cn&recurCnt=5&backCnt=2&url=https://example.com/your-calendar.csv
+https://<your-csv-to-ical-host>/remote?lang=zh-cn&recurCnt=5&backCnt=2&url=https%3A%2F%2Fexample.com%2Fyour-calendar.csv
 ```
 
 **Using Local CSV Files**
@@ -215,7 +215,7 @@ Here, `my-local-calendar` corresponds to the key name under `csv-providers` in `
 
 Q: Why aren't my calendar events displayed?
 
-A: Please check if your CSV file format is correct, especially if the columns `Name`, `Month`, `Day`, `Year`, `CalendarType` exist and the data format is correct. Also, check if the `file` or `url` path in `config.yaml` is correct.
+A: Please check if your CSV file format is correct, especially if the columns `Name`, `Month`, `Day`, `Year`, `CalendarType` exist and the data format is correct. Also, check if the `file` path or `url` encode in `config.yaml` is correct.
 
 ---
 

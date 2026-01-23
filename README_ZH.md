@@ -12,7 +12,7 @@ README [English](README.md) | [中文](README_ZH.md)
 
 ## 这是什么
 
-CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 应用程序，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以通过订阅 URL <https://csv-to-ical.fantasticmao.cn/remote?url=https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv> 来将 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日程事件导入到你的 iOS 日历 / Google 日历中。
+CSV-to-iCal 是一个基于 Go 语言的可快速部署的 Web 应用程序，用于将 [CSV](https://datatracker.ietf.org/doc/html/rfc4180) 格式的内容转化成 [iCal](https://datatracker.ietf.org/doc/html/rfc5545) 格式的在线订阅链接。例如，你可以通过订阅 URL <https://csv-to-ical.fantasticmao.cn/remote?url=https%3A%2F%2Fraw.githubusercontent.com%2Ffantasticmao%2Fcsv-to-ical%2Fmain%2Fcsv%2Ftestdata%2Fcalendar_test.csv> 来将 [calendar_test.csv](csv/testdata/calendar_test.csv) 中的日程事件导入到你的 iOS 日历 / Google 日历中。
 
 ![usage](usage.png)
 
@@ -147,7 +147,7 @@ start HTTP server success, bind address: 0.0.0.0:7788
 <details open>
 <summary>获取 iCal 订阅链接</summary>
 
-通过访问 <http://0.0.0.0:7788/remote?url=...> 或 <http://0.0.0.0:7788/local/my-local-calendar>，可以获取 iCal 订阅链接。
+通过访问 <http://0.0.0.0:7788/remote?url=encode(...)> 或 <http://0.0.0.0:7788/local/my-local-calendar>，可以获取 iCal 订阅链接。
 
 </details>
 
@@ -174,7 +174,7 @@ CSV 文件格式有特殊的要求，应当包含以下列：
 你可以通过 `remote` 接口订阅一个公共可访问的 CSV 文件。例如，如果你有一个公共的 CSV 文件链接 <https://example.com/your-calendar.csv>，你可以使用以下 URL 访问：
 
 ```
-https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv
+https://<your-csv-to-ical-host>/remote?url=encode(https://example.com/your-calendar.csv)
 ```
 
 - `url`: 远程 CSV 文件的完整 URL。
@@ -185,7 +185,7 @@ https://<your-csv-to-ical-host>/remote?url=https://example.com/your-calendar.csv
 例如，订阅一个中文的重复日程，最多重复五年，最多回溯两年：
 
 ```
-https://<your-csv-to-ical-host>/remote?lang=zh-cn&recurCnt=5&backCnt=2&url=https://example.com/your-calendar.csv
+https://<your-csv-to-ical-host>/remote?lang=zh-cn&recurCnt=5&backCnt=2&url=https%3A%2F%2Fexample.com%2Fyour-calendar.csv
 ```
 
 **使用本地 CSV 文件**
@@ -215,7 +215,7 @@ https://<your-csv-to-ical-host>/local/my-local-calendar
 
 Q: 为什么我的日历事件没有显示？
 
-A: 请检查你的 CSV 文件格式是否正确，特别是 `Name`, `Month`, `Day`, `Year`, `CalendarType` 这些列是否存在且数据格式正确。另外，检查 `config.yaml` 中的 `file` 或 `url` 路径是否正确。
+A: 请检查你的 CSV 文件格式是否正确，特别是 `Name`, `Month`, `Day`, `Year`, `CalendarType` 这些列是否存在且数据格式正确。另外，检查 `config.yaml` 中的 `file` 路径或 `url` 编码是否正确。
 
 ---
 
