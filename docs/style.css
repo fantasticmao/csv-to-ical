@@ -105,7 +105,7 @@ tr.drag-over {
   border-top: 2px solid #007bff;
 }
 
-.add-next-row-btn {
+.insert-below-btn {
   background-color: #28a745; /* Green color for add action */
   color: white;
   border: none;
@@ -114,7 +114,7 @@ tr.drag-over {
   cursor: pointer;
 }
 
-.add-next-row-btn:hover {
+.insert-below-btn:hover {
   background-color: #218838;
 }
 

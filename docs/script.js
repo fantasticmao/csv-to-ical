@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let tableData = [
     ["Name", "Month", "Day", "Year", "Calendar_Type"],
-    ["New Year", "1", "1", "2026", "solar"],
-    ["Chinese New Year", "1", "1", "2026", "lunar"],
-    ["Women's Day", "3", "8", "2026", "solar"],
-    ["Dragon Boat Festival", "5", "5", "2026", "lunar"],
-    ["Children's Day", "6", "1", "2026", "solar"],
-    ["Mid-Autumn Festival", "8", "15", "2026", "lunar"],
     ["Bruce Lee", "11", "27", "1940", "birthday_solar"],
     ["Bruce Lee", "10", "28", "1940", "birthday_lunar"],
+    ["New Year", "1", "1", "", "solar"],
+    ["Chinese New Year", "1", "1", "", "lunar"],
+    ["Women's Day", "3", "8", "", "solar"],
+    ["Dragon Boat Festival", "5", "5", "", "lunar"],
+    ["Children's Day", "6", "1", "", "solar"],
+    ["Mid-Autumn Festival", "8", "15", "", "lunar"],
   ];
 
   // Find column indexes once
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const daysInMonth = getDaysInMonth(year, month);
             for (let i = 1; i <= daysInMonth; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
           } else if (colIndex === yearColIndex) {
-            const currentYear = new Date().getFullYear();
+            options += `<option value="" ${!cellText ? 'selected' : ''}></option>`; // Add empty option
             for (let i = 1900; i <= 2100; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
           } else if (colIndex === calendarTypeColIndex) {
             CALENDAR_TYPES.forEach(type => options += `<option value="${type}" ${type === cellText ? 'selected' : ''}>${type}</option>`);
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         tableHtml += `<td>${cellContent}</td>`;
       });
-      tableHtml += `<td class="action-buttons"><button class="add-next-row-btn" data-row-index="${rowIndex}">Add Next</button><button class="delete-row-btn" data-row-index="${rowIndex}">Delete</button></td>`;
+      tableHtml += `<td class="action-buttons"><button class="insert-below-btn" data-row-index="${rowIndex}">Insert Below</button><button class="delete-row-btn" data-row-index="${rowIndex}">Delete</button></td>`;
       tableHtml += '</tr>';
     });
     tableHtml += '</tbody></table>';
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function addEventListeners() {
     tableContainer.querySelectorAll('.delete-row-btn').forEach(btn => btn.addEventListener('click', handleDeleteRow));
-    tableContainer.querySelectorAll('.add-next-row-btn').forEach(btn => btn.addEventListener('click', handleAddNextRow));
+    tableContainer.querySelectorAll('.insert-below-btn').forEach(btn => btn.addEventListener('click', handleInsertBelow));
     tableContainer.querySelectorAll('input, select').forEach(el => el.addEventListener('change', handleCellUpdate));
     tableContainer.querySelectorAll('[contenteditable]').forEach(el => el.addEventListener('blur', handleCellUpdate));
     tableContainer.querySelectorAll('tr[draggable="true"]').forEach(row => {
@@ -110,14 +110,14 @@ document.addEventListener('DOMContentLoaded', function () {
     renderTable();
   }
 
-  function handleAddNextRow(e) {
+  function handleInsertBelow(e) {
     const rowIndex = parseInt(e.target.dataset.rowIndex, 10);
     const numCols = tableData[0] ? tableData[0].length : 1;
     const newRow = Array(numCols).fill('');
     if (nameColIndex !== -1) newRow[nameColIndex] = '';
     if (monthColIndex !== -1) newRow[monthColIndex] = '1';
     if (dayColIndex !== -1) newRow[dayColIndex] = '1';
-    if (yearColIndex !== -1) newRow[yearColIndex] = new Date().getFullYear().toString();
+    if (yearColIndex !== -1) newRow[yearColIndex] = '';
     if (calendarTypeColIndex !== -1) newRow[calendarTypeColIndex] = CALENDAR_TYPES[0];
     tableData.splice(rowIndex + 2, 0, newRow); // Insert after the current row
     renderTable();
