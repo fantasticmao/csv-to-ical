@@ -118,7 +118,6 @@ tr.drag-over {
   background-color: #218838;
 }
 
-.action-buttons {
-  display: flex;
-  gap: 5px; /* Creates space between buttons */
+.action-buttons button {
+  margin-right: 5px;
 }

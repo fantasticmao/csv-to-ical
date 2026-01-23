@@ -6,14 +6,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
   let tableData = [
     ["Name", "Month", "Day", "Year", "Calendar_Type"],
-    ["New Year's Day", "1", "1", "2026", "solar"],
-    ["Chinese New Year's Day", "1", "1", "2026", "lunar"],
+    ["New Year", "1", "1", "2026", "solar"],
+    ["Chinese New Year", "1", "1", "2026", "lunar"],
     ["Women's Day", "3", "8", "2026", "solar"],
-    ["Children's Day", "6", "1", "2026", "solar"],
     ["Dragon Boat Festival", "5", "5", "2026", "lunar"],
-    ["Magpie Festival", "7", "7", "2026", "lunar"],
+    ["Children's Day", "6", "1", "2026", "solar"],
     ["Mid-Autumn Festival", "8", "15", "2026", "lunar"],
-    ["Christmas Day", "12", "25", "2026", "solar"]
+    ["Bruce Lee", "11", "27", "1940", "birthday_solar"],
+    ["Bruce Lee", "10", "28", "1940", "birthday_lunar"],
   ];
 
   // Find column indexes once
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
             for (let i = 1; i <= daysInMonth; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
           } else if (colIndex === yearColIndex) {
             const currentYear = new Date().getFullYear();
-            for (let i = currentYear - 50; i <= currentYear + 50; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
+            for (let i = 1900; i <= 2100; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
           } else if (colIndex === calendarTypeColIndex) {
             CALENDAR_TYPES.forEach(type => options += `<option value="${type}" ${type === cellText ? 'selected' : ''}>${type}</option>`);
           }
@@ -133,11 +133,27 @@ document.addEventListener('DOMContentLoaded', function () {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'calendar.csv');
+    link.setAttribute('download', 'csv-to-ical.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   });
+
+  const getLinkBtn = document.getElementById('get-link-btn');
+  if (getLinkBtn) {
+    getLinkBtn.addEventListener('click', function () {
+      const csvContent = tableToCSV();
+      try {
+        const base64Content = btoa(csvContent);
+        const urlEncodedContent = encodeURIComponent(base64Content);
+        const subscriptionLink = `https://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
+        window.open(subscriptionLink, '_blank');
+      } catch (e) {
+        console.error("Failed to encode CSV content: ", e);
+        alert("Could not generate link due to an encoding error.");
+      }
+    });
+  }
 
   // Drag and Drop handlers
   function handleDragStart(e) {
