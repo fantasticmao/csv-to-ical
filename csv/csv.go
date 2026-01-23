@@ -1,6 +1,7 @@
 package csv
 
 import (
+	"encoding/base64"
 	"encoding/csv"
 	"fmt"
 	"github.com/fantasticmao/csv-to-ical/common"
@@ -35,6 +36,15 @@ func ParseEventFromUrl(csvUrl string) ([]Event, error) {
 
 	defer resp.Body.Close()
 	return parseEvent(resp.Body)
+}
+
+func ParseEventFromBase64(data string) ([]Event, error) {
+	decoded, err := base64.StdEncoding.DecodeString(data)
+	if err != nil {
+		return nil, err
+	}
+	reader := strings.NewReader(string(decoded))
+	return parseEvent(reader)
 }
 
 func parseEvent(reader io.Reader) ([]Event, error) {

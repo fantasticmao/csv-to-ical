@@ -1,8 +1,10 @@
 package csv
 
 import (
+	"encoding/base64"
 	"github.com/fantasticmao/csv-to-ical/common"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -16,6 +18,18 @@ func TestParseEventFromFile(t *testing.T) {
 
 func TestParseEventFromUrl(t *testing.T) {
 	events, err := ParseEventFromUrl("https://raw.githubusercontent.com/fantasticmao/csv-to-ical/main/csv/testdata/calendar_test.csv")
+	assert.Nil(t, err)
+	assert.NotNil(t, events)
+
+	validate(t, events)
+}
+
+func TestParseEventFromBase64(t *testing.T) {
+	data, err := os.ReadFile("testdata/calendar_test.csv")
+	assert.Nil(t, err)
+
+	encoded := base64.StdEncoding.EncodeToString(data)
+	events, err := ParseEventFromBase64(encoded)
 	assert.Nil(t, err)
 	assert.NotNil(t, events)
 

@@ -35,8 +35,9 @@ func VersionHandler() gin.HandlerFunc {
 func RemoteHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		url := c.Query("url")
-		if url == "" {
-			c.String(http.StatusBadRequest, "query param: url is required")
+		base64 := c.Query("base64")
+		if url == "" && base64 == "" {
+			c.String(http.StatusBadRequest, "query param: url or base64 is required")
 			return
 		}
 
@@ -77,10 +78,21 @@ func RemoteHandler() gin.HandlerFunc {
 			}
 		}
 
-		events, err := csv.ParseEventFromUrl(url)
-		if err != nil {
-			c.String(http.StatusBadRequest, "fetch csv events from url: '%v' error: %v", url, err.Error())
-			return
+		var events []csv.Event
+		if url != "" {
+			e, err := csv.ParseEventFromUrl(url)
+			if err != nil {
+				c.String(http.StatusBadRequest, "fetch csv events from url: '%v' error: %v", url, err.Error())
+				return
+			}
+			events = e
+		} else if base64 != "" {
+			e, err := csv.ParseEventFromBase64(base64)
+			if err != nil {
+				c.String(http.StatusBadRequest, "fetch csv events from base64 data error: %v", err.Error())
+				return
+			}
+			events = e
 		}
 
 		var components []ical.ComponentEvent
