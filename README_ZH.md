@@ -175,9 +175,12 @@ CSV 文件格式有特殊的要求，应当包含以下列：
 
 ```
 https://<your-csv-to-ical-host>/remote?url=encode(https://example.com/your-calendar.csv)
+
+https://<your-csv-to-ical-host>/remote?base64=encode(base64(your calendar csv content))
 ```
 
-- `url`: 远程 CSV 文件的完整 URL。
+- `url` (或 `base64`): 远程 CSV 文件的 URL 编码。
+- `base64` (或 `url`): 远程 CSV 文件内容的 base64 编码的 URL 编码。
 - `lang` (可选): 事件语言，`en` (默认) 或 `zh-cn`。
 - `recurCnt` (可选): 重复日程的最大年份数，默认为 3，最大 5。
 - `backCnt` (可选): 回溯日程的最大年份数，默认为 1，最大 3。
