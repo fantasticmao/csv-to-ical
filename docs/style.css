@@ -1,37 +1,65 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.6;
-  background-color: #f4f4f4;
-  color: #333;
+  background-color: #fefefe;
+  color: #2e2e2e;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.container {
-  max-width: 90%;
-  margin: auto;
-  background: #fff;
-  padding: 20px 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+main, footer {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
-h1, h2 {
-  color: #333;
+footer {
+  text-align: center;
+  font-size: 0.9em;
+  color: #777;
+}
+
+h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #24292e;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-top: 1.2rem;
+  margin-bottom: 1rem;
+  color: #24292e;
+}
+
+a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 #editor-controls {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 
 #editor-controls button {
+  margin-right: 5px;
   background-color: #007bff;
   color: #fff;
-  padding: 8px 15px;
+  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 #editor-controls button:hover {
@@ -41,7 +69,6 @@ h1, h2 {
 #csv-table-container {
   overflow-x: auto;
   border: 1px solid #ddd;
-  border-radius: 5px;
 }
 
 table {
@@ -51,49 +78,14 @@ table {
 
 th, td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 0.5rem;
   text-align: left;
-  min-width: 120px;
+  min-width: 100px;
 }
 
 th {
   background-color: #f8f9fa;
   font-weight: bold;
-}
-
-input, select, [contenteditable] {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 6px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
-input:focus, select:focus, [contenteditable]:focus {
-  border-color: #007bff;
-  outline: none;
-  background-color: #e8f0fe;
-}
-
-.delete-row-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.delete-row-btn:hover {
-  background-color: #c82333;
-}
-
-.drag-handle {
-  cursor: grab;
-  text-align: center;
-  width: 20px;
-  min-width: 20px;
-  color: #aaa;
 }
 
 tr.dragging {
@@ -105,11 +97,37 @@ tr.drag-over {
   border-top: 2px solid #007bff;
 }
 
+.drag-handle {
+  cursor: grab;
+  text-align: center;
+  width: 70px;
+  min-width: 70px;
+  color: #aaa;
+}
+
+input, select, [contenteditable] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+input:focus, select:focus, [contenteditable]:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #e8f0fe;
+}
+
+.action-buttons button {
+  margin-right: 5px;
+}
+
 .insert-below-btn {
-  background-color: #28a745; /* Green color for add action */
+  background-color: #28a745;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 0.5rem 1rem;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -118,6 +136,15 @@ tr.drag-over {
   background-color: #218838;
 }
 
-.action-buttons button {
-  margin-right: 5px;
+.delete-row-btn {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-row-btn:hover {
+  background-color: #c82333;
 }
