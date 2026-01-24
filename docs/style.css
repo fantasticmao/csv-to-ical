@@ -1,45 +1,4 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  line-height: 1.6;
-  background-color: #fefefe;
-  color: #2e2e2e;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-main, footer {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-footer {
-  text-align: center;
-  font-size: 0.9em;
-  color: #777;
-}
-
-h1 {
-  font-size: 2em;
-  border-bottom: 1px solid #eaecef;
-  margin-top: 0;
-  margin-bottom: 1rem;
-  color: #24292e;
-}
-
-h2 {
-  font-size: 1.5em;
-  margin-top: 1.2rem;
-  margin-bottom: 1rem;
-  color: #24292e;
-}
-
 a {
-  color: #0366d6;
   text-decoration: none;
 }
 
@@ -47,54 +6,12 @@ a:hover {
   text-decoration: underline;
 }
 
-#editor-controls {
-  margin-bottom: 1rem;
+input, select {
+  min-width: 80px;
 }
 
-#editor-controls button {
-  margin-right: 5px;
-  background-color: #007bff;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-#editor-controls button:hover {
-  background-color: #0056b3;
-}
-
-#csv-table-container {
-  overflow-x: auto;
-  border: 1px solid #ddd;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
-  text-align: left;
-  min-width: 100px;
-}
-
-th {
-  background-color: #f8f9fa;
-  font-weight: bold;
-}
-
-tr.dragging {
-  opacity: 0.5;
-  background: #cce5ff;
-}
-
-tr.drag-over {
-  border-top: 2px solid #007bff;
+.action-handle {
+  min-width: 150px;
 }
 
 .drag-handle {
@@ -105,46 +22,10 @@ tr.drag-over {
   color: #aaa;
 }
 
-input, select, [contenteditable] {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  border: 1px solid transparent;
-  border-radius: 4px;
+tr.dragging {
+  opacity: 0.5;
 }
 
-input:focus, select:focus, [contenteditable]:focus {
-  border-color: #007bff;
-  outline: none;
-  background-color: #e8f0fe;
-}
-
-.action-buttons button {
-  margin-right: 5px;
-}
-
-.insert-below-btn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.insert-below-btn:hover {
-  background-color: #218838;
-}
-
-.delete-row-btn {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.delete-row-btn:hover {
-  background-color: #c82333;
+tr.drag-over {
+  border-top: 2px solid #007bff;
 }

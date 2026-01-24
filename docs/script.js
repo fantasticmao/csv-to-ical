@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const downloadBtn = document.getElementById('download-btn');
   const tableContainer = document.getElementById('csv-table-container');
 
   const CALENDAR_TYPES = ['solar', 'lunar', 'birthday_solar', 'birthday_lunar'];
@@ -23,55 +22,59 @@ document.addEventListener('DOMContentLoaded', function () {
   const yearColIndex = tableData[0].indexOf('Year');
   const calendarTypeColIndex = tableData[0].indexOf('Calendar_Type');
 
-  let draggedRowIndex = null;
-
-  function getDaysInMonth(year, month) {
-    return new Date(year, month, 0).getDate();
-  }
-
   function renderTable() {
-    let tableHtml = '<table>';
+    let tableHtml = '<table class="table table-bordered">';
+
     // Header
-    tableHtml += '<thead><tr>';
-    tableHtml += '<th></th>'; // For drag handle
+    tableHtml += '<thead class="table-light"><tr>';
+    tableHtml += '<th class="drag-handle">#</th>'; // For drag handle
     tableData[0].forEach((header) => {
       tableHtml += `<th>${header}</th>`;
     });
-    tableHtml += '<th>Actions</th>'; // Combined header for buttons
+    tableHtml += '<th class="action-handle">Actions</th>'; // Combined header for buttons
     tableHtml += '</tr></thead>';
 
     // Body
     tableHtml += '<tbody>';
     tableData.slice(1).forEach((row, rowIndex) => {
       tableHtml += `<tr data-row-index="${rowIndex}" draggable="true">`;
-      tableHtml += '<td class="drag-handle">::</td>';
+      tableHtml += '<td class="drag-handle opacity-50">::</td>';
 
       row.forEach((cellText, colIndex) => {
         let cellContent = '';
         if (colIndex === nameColIndex) {
-          cellContent = `<input type="text" value="${cellText}" data-col-index="${colIndex}">`;
+          cellContent = `<input type="text" class="form-control form-control-sm" value="${cellText}" data-col-index="${colIndex}">`;
         } else if (colIndex === monthColIndex || colIndex === dayColIndex || colIndex === yearColIndex || colIndex === calendarTypeColIndex) {
           let options = '';
           if (colIndex === monthColIndex) {
-            for (let i = 1; i <= 12; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
+            for (let i = 1; i <= 12; i++) {
+              options += `<option value="${i}" ${i.toString() === cellText ? 'selected' : ''}>${i}</option>`;
+            }
           } else if (colIndex === dayColIndex) {
             const year = row[yearColIndex] || new Date().getFullYear();
             const month = row[monthColIndex] || 1;
             const daysInMonth = getDaysInMonth(year, month);
-            for (let i = 1; i <= daysInMonth; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
+            for (let i = 1; i <= daysInMonth; i++) {
+              options += `<option value="${i}" ${i.toString() === cellText ? 'selected' : ''}>${i}</option>`;
+            }
           } else if (colIndex === yearColIndex) {
             options += `<option value="" ${!cellText ? 'selected' : ''}></option>`; // Add empty option
-            for (let i = 1900; i <= 2100; i++) options += `<option value="${i}" ${i == cellText ? 'selected' : ''}>${i}</option>`;
+            for (let i = 1900; i <= 2100; i++) {
+              options += `<option value="${i}" ${i.toString() === cellText ? 'selected' : ''}>${i}</option>`;
+            }
           } else if (colIndex === calendarTypeColIndex) {
-            CALENDAR_TYPES.forEach(type => options += `<option value="${type}" ${type === cellText ? 'selected' : ''}>${type}</option>`);
+            CALENDAR_TYPES.forEach(type =>
+              options += `<option value="${type}" ${type === cellText ? 'selected' : ''}>${type}</option>`
+            );
           }
-          cellContent = `<select data-col-index="${colIndex}">${options}</select>`;
-        } else {
-          cellContent = `<div contenteditable="true" data-col-index="${colIndex}">${cellText}</div>`;
+          cellContent = `<select class="form-select form-select-sm" data-col-index="${colIndex}">${options}</select>`;
         }
         tableHtml += `<td>${cellContent}</td>`;
       });
-      tableHtml += `<td class="action-buttons"><button class="insert-below-btn" data-row-index="${rowIndex}">Insert Below</button><button class="delete-row-btn" data-row-index="${rowIndex}">Delete</button></td>`;
+      tableHtml += `<td>
+<button class="insert-row btn btn-success btn-sm me-1" data-row-index="${rowIndex}">Insert</button>
+<button class="delete-row btn btn-danger btn-sm" data-row-index="${rowIndex}">Delete</button>
+</td>`;
       tableHtml += '</tr>';
     });
     tableHtml += '</tbody></table>';
@@ -79,29 +82,37 @@ document.addEventListener('DOMContentLoaded', function () {
     addEventListeners();
   }
 
-  function addEventListeners() {
-    tableContainer.querySelectorAll('.delete-row-btn').forEach(btn => btn.addEventListener('click', handleDeleteRow));
-    tableContainer.querySelectorAll('.insert-below-btn').forEach(btn => btn.addEventListener('click', handleInsertBelow));
-    tableContainer.querySelectorAll('input, select').forEach(el => el.addEventListener('change', handleCellUpdate));
-    tableContainer.querySelectorAll('[contenteditable]').forEach(el => el.addEventListener('blur', handleCellUpdate));
-    tableContainer.querySelectorAll('tr[draggable="true"]').forEach(row => {
-      row.addEventListener('dragstart', handleDragStart);
-      row.addEventListener('dragover', handleDragOver);
-      row.addEventListener('dragleave', handleDragLeave);
-      row.addEventListener('drop', handleDrop);
-    });
+  function getDaysInMonth(year, month) {
+    return new Date(year, month, 0).getDate();
   }
 
-  function handleCellUpdate(e) {
-    const el = e.target;
-    const rowIndex = parseInt(el.closest('tr').dataset.rowIndex, 10);
-    const colIndex = parseInt(el.dataset.colIndex, 10);
-    const value = el.tagName === 'DIV' ? el.innerText : el.value;
-    tableData[rowIndex + 1][colIndex] = value;
+  function addEventListeners() {
+    tableContainer.querySelectorAll('.insert-row')
+      .forEach(btn => btn.addEventListener('click', handleInsertRow));
+    tableContainer.querySelectorAll('.delete-row')
+      .forEach(btn => btn.addEventListener('click', handleDeleteRow));
+    tableContainer.querySelectorAll('input, select')
+      .forEach(el => el.addEventListener('change', handleCellUpdate));
+    tableContainer.querySelectorAll('tr[draggable="true"]')
+      .forEach(row => {
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('dragleave', handleDragLeave);
+        row.addEventListener('drop', handleDrop);
+      });
+  }
 
-    if (colIndex === monthColIndex || colIndex === yearColIndex) {
-      renderTable(); // Re-render to update day dropdown
-    }
+  function handleInsertRow(e) {
+    const rowIndex = parseInt(e.target.dataset.rowIndex, 10);
+    const numCols = tableData[0].length;
+    const newRow = Array(numCols).fill('');
+    newRow[nameColIndex] = '';
+    newRow[monthColIndex] = '1';
+    newRow[dayColIndex] = '1';
+    newRow[yearColIndex] = '';
+    newRow[calendarTypeColIndex] = CALENDAR_TYPES[0];
+    tableData.splice(rowIndex + 2, 0, newRow); // Insert after the current row
+    renderTable();
   }
 
   function handleDeleteRow(e) {
@@ -110,18 +121,21 @@ document.addEventListener('DOMContentLoaded', function () {
     renderTable();
   }
 
-  function handleInsertBelow(e) {
-    const rowIndex = parseInt(e.target.dataset.rowIndex, 10);
-    const numCols = tableData[0] ? tableData[0].length : 1;
-    const newRow = Array(numCols).fill('');
-    if (nameColIndex !== -1) newRow[nameColIndex] = '';
-    if (monthColIndex !== -1) newRow[monthColIndex] = '1';
-    if (dayColIndex !== -1) newRow[dayColIndex] = '1';
-    if (yearColIndex !== -1) newRow[yearColIndex] = '';
-    if (calendarTypeColIndex !== -1) newRow[calendarTypeColIndex] = CALENDAR_TYPES[0];
-    tableData.splice(rowIndex + 2, 0, newRow); // Insert after the current row
-    renderTable();
+  function handleCellUpdate(e) {
+    const el = e.target;
+    const rowIndex = parseInt(el.closest('tr').dataset.rowIndex, 10);
+    const colIndex = parseInt(el.dataset.colIndex, 10);
+    tableData[rowIndex + 1][colIndex] = el.value;
+
+    if (colIndex === monthColIndex || colIndex === yearColIndex) {
+      renderTable(); // Re-render to update day dropdown
+    }
   }
+
+  // Button handlers
+  const downloadBtn = document.getElementById('download-btn');
+  const getIcalBtn = document.getElementById('get-ical-btn');
+  const subscribeIcalBtn = document.getElementById('subscribe-ical-btn');
 
   function tableToCSV() {
     return tableData.map(row => row.join(',')).join('\n');
@@ -139,39 +153,42 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.removeChild(link);
   });
 
-  const getIcalBtn = document.getElementById('get-ical-btn');
-  if (getIcalBtn) {
-    getIcalBtn.addEventListener('click', function () {
-      const csvContent = tableToCSV();
-      try {
-        const base64Content = btoa(csvContent);
-        const urlEncodedContent = encodeURIComponent(base64Content);
-        const subscriptionLink = `https://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
-        window.open(subscriptionLink, '_blank');
-      } catch (e) {
-        console.error("Failed to encode CSV content: ", e);
-        alert("Could not generate link due to an encoding error.");
-      }
-    });
-  }
 
-  const subscribeIcalBtn = document.getElementById('subscribe-ical-btn');
-  if (subscribeIcalBtn) {
-    subscribeIcalBtn.addEventListener('click', function () {
-      const csvContent = tableToCSV();
-      try {
-        const base64Content = btoa(csvContent);
-        const urlEncodedContent = encodeURIComponent(base64Content);
-        const webcalLink = `webcal://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
-        window.open(webcalLink, '_self'); // Use _self to prompt subscription directly
-      } catch (e) {
-        console.error("Failed to encode CSV content for subscription: ", e);
-        alert("Could not generate subscription link due to an encoding error.");
-      }
-    });
-  }
+  getIcalBtn.addEventListener('click', function () {
+    const csvContent = tableToCSV();
+    try {
+      const bytes = new TextEncoder().encode(csvContent);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      const base64Content = btoa(binary);
+      const urlEncodedContent = encodeURIComponent(base64Content);
+      const subscriptionLink = `https://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
+      window.open(subscriptionLink, '_blank');
+    } catch (e) {
+      console.error("Failed to encode CSV content: ", e);
+      alert("Could not generate link due to an encoding error.");
+    }
+  });
+
+  subscribeIcalBtn.addEventListener('click', function () {
+    const csvContent = tableToCSV();
+    try {
+      const bytes = new TextEncoder().encode(csvContent);
+      let binary = '';
+      bytes.forEach(b => binary += String.fromCharCode(b));
+      const base64Content = btoa(binary);
+      const urlEncodedContent = encodeURIComponent(base64Content);
+      const webcalLink = `webcal://csv-to-ical.fantasticmao.cn/remote?base64=${urlEncodedContent}`;
+      window.open(webcalLink, '_self');
+    } catch (e) {
+      console.error("Failed to encode CSV content for subscription: ", e);
+      alert("Could not generate subscription link due to an encoding error.");
+    }
+  });
 
   // Drag and Drop handlers
+  let draggedRowIndex = null;
+
   function handleDragStart(e) {
     draggedRowIndex = parseInt(e.target.dataset.rowIndex, 10);
     e.target.classList.add('dragging');
@@ -193,7 +210,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const targetRow = e.target.closest('tr');
     const targetIndex = parseInt(targetRow.dataset.rowIndex, 10);
 
-    document.querySelectorAll('.dragging, .drag-over').forEach(el => el.classList.remove('dragging', 'drag-over'));
+    document.querySelectorAll('.dragging, .drag-over')
+      .forEach(el => el.classList.remove('dragging', 'drag-over'));
 
     if (draggedRowIndex !== null && draggedRowIndex !== targetIndex) {
       const movedRow = tableData.splice(draggedRowIndex + 1, 1)[0];
