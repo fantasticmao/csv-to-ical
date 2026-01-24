@@ -45,7 +45,8 @@ func main() {
 		log.Panic(err, "parse config file error, config path: '%v'", configPath)
 	}
 
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
 	r.Use(func(c *gin.Context) {
 		c.Header("Content-Type", "text/plain; charset=UTF-8")
 	})
